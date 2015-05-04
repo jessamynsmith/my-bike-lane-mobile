@@ -60,8 +60,12 @@ angular.module('mybikelane.controllers', [])
                 var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
                 geocoder.geocode({ 'latLng': latlng }, function (results, status) {
                     if (status == google.maps.GeocoderStatus.OK) {
-                        if (results[1]) {
-                            $scope.params.address = results[1].formatted_address;
+                          console.log(results[0].address_components[4].long_name);
+                          console.log(results[0].formatted_address);
+                          console.log(results[1].formatted_address);
+                        if (results[0]) {
+                          $scope.params.address = results[0].formatted_address;
+                            $scope.params.city = results[0].address_components[4].long_name;
                         } else {
                             console.log('Location not found');
                         }
