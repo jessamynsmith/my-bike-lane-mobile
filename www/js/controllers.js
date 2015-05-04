@@ -50,9 +50,10 @@ angular.module('mybikelane.controllers', [])
     $scope.params = {};
   })
 
-.controller('ViolationsCtrl', function($scope) {
-  $scope.list = [];
+.controller('ViolationsCtrl', function($scope, $stateParams, Violations) {
+  $scope.violations = Violations.query();
 })
 
-.controller('ViolationCtrl', function($scope, $stateParams) {
+.controller('ViolationCtrl', function($scope, $stateParams, Violations) {
+    $scope.violation = Violations.get({}, {'id': $stateParams.violationId});
 });

@@ -1,5 +1,18 @@
-<ion-view view-title="Violation">
+<ion-view view-title="{{ violation.title }}">
   <ion-content>
-    <h1>{{ violation.title }}</h1>
+    <ion-list>
+        <div class="row">
+          <div class="col">Address: </div>
+          <div class="col">{{ violation.address }}</div>
+        </div>
+        <div class="row">
+          <div class="col">Created at: </div>
+          <div class="col">{{ violation.created_at }}</div>
+        </div>
+        <div class="row">
+          <div class="col">Description: </div>
+          <div class="col">{{ violation.description }}</div>
+        </div>
+      </ion-list>
   </ion-content>
 </ion-view>

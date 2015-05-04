@@ -1,4 +1,4 @@
-angular.module('mybikelane.services', [])
+angular.module('mybikelane.services', ['ngResource'])
 
   .factory('Camera', ['$q', function($q) {
 
@@ -21,4 +21,15 @@ angular.module('mybikelane.services', [])
         return q.promise;
       }
     }
-  }]);
+  }])
+
+  .factory('Violations', function($resource) {
+    return $resource(
+        "http://staging.mybikelane.to/violations.json/:id",
+        {id: "@id" },
+        {
+            "reviews": {'method': 'GET', isArray: true}
+        }
+    );
+  });
+
