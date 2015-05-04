@@ -1,0 +1,9 @@
+<ion-view view-title="Violations">
+  <ion-content>
+    <ion-list>
+      <ion-item ng-repeat="violation in list" href="#/app/violation/{{violation.id}}">
+        {{violation.title}}
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

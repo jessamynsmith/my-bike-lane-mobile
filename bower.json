@@ -1,0 +1,7 @@
+{
+  "name": "my-bike-lane-mobile",
+  "private": "true",
+  "dependencies": {
+    "ionic": "v1.0.0-rc.3"
+  }
+}

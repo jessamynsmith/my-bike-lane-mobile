@@ -1,0 +1,27 @@
+<ion-view view-title="Submit a Violation">
+  <ion-content>
+    <form ng-submit="submitViolation()">
+      <ion-list>
+        <div class="row">
+          <div class="col">
+            <img ng-src="{{params.imageUri}}" style="max-width: 100%">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <button class="button button-positive" ng-click="getPhoto()">
+              <i class="icon ion-camera"></i> Take photo
+            </button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <button type="submit" class="button button-positive">
+              Submit
+            </button>
+          </div>
+        </div>
+      </ion-list>
+    </form>
+  </ion-content>
+</ion-view>
