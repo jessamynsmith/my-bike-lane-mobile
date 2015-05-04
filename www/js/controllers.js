@@ -33,7 +33,7 @@ angular.module('mybikelane.controllers', [])
   };
 })
 
-  .controller('SubmitCtrl', function($scope, Camera) {
+  .controller('SubmitCtrl', function($scope, $cordovaGeolocation, Camera, Violation) {
     $scope.getPhoto = function() {
       Camera.getPicture().then(function(imageUri) {
         $scope.params.imageUri = imageUri;
@@ -44,16 +44,27 @@ angular.module('mybikelane.controllers', [])
 
     $scope.submitViolation = function() {
       console.log("Submitting...");
+      var violation = new Violation($scope.params);
+      var result = violation.$save();
+      console.log(result);
     };
 
     $scope.todayDate = new Date();
     $scope.params = {};
+
+    var posOptions = {timeout: 10000, enableHighAccuracy: false};
+    $cordovaGeolocation.getCurrentPosition(posOptions).then(function (position) {
+        $scope.params.lat = position.coords.latitude;
+        $scope.params.lon = position.coords.longitude;
+      }, function(err) {
+        console.log('Error retrieving location: ' + err)
+      });
   })
 
-.controller('ViolationsCtrl', function($scope, $stateParams, Violations) {
-  $scope.violations = Violations.query();
+.controller('ViolationsCtrl', function($scope, $stateParams, Violation) {
+  $scope.violations = Violation.query();
 })
 
-.controller('ViolationCtrl', function($scope, $stateParams, Violations) {
-    $scope.violation = Violations.get({}, {'id': $stateParams.violationId});
+.controller('ViolationCtrl', function($scope, $stateParams, Violation) {
+    $scope.violation = Violation.get({}, {'id': $stateParams.violationId});
 });

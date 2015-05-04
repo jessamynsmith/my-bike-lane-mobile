@@ -23,13 +23,10 @@ angular.module('mybikelane.services', ['ngResource'])
     }
   }])
 
-  .factory('Violations', function($resource) {
+  .factory('Violation', function($resource) {
     return $resource(
         "http://staging.mybikelane.to/violations/:id.json/",
-        {id: "@id" },
-        {
-            "reviews": {'method': 'GET', isArray: true}
-        }
+        {id: "@id"}
     );
   });
 
