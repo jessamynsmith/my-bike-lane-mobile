@@ -61,6 +61,16 @@ angular.module('mybikelane.controllers', [])
       });
   })
 
+.controller('MapCtrl', function($scope, $cordovaGeolocation) {
+    var posOptions = {timeout: 10000, enableHighAccuracy: false};
+    $cordovaGeolocation.getCurrentPosition(posOptions).then(function (position) {
+      $scope.map = { center: { latitude: position.coords.latitude,
+        longitude: position.coords.longitude }, zoom: 15 };
+      }, function(err) {
+        console.log('Error retrieving location: ' + err)
+      });
+})
+
 .controller('ViolationsCtrl', function($scope, $stateParams, Violation) {
   $scope.violations = Violation.query();
 })

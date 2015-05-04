@@ -4,8 +4,8 @@
 // 'mybikelane' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'mybikelane.controllers' is found in controllers.js
-angular.module('mybikelane', ['ionic', 'ngCordova', 'mybikelane.controllers',
-  'mybikelane.services'])
+angular.module('mybikelane', ['ionic', 'ngCordova', 'uiGmapgoogle-maps',
+  'mybikelane.controllers', 'mybikelane.services'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -19,6 +19,14 @@ angular.module('mybikelane', ['ionic', 'ngCordova', 'mybikelane.controllers',
       StatusBar.styleDefault();
     }
   });
+})
+
+  .config(function(uiGmapGoogleMapApiProvider) {
+    uiGmapGoogleMapApiProvider.configure({
+        //    key: 'your api key',
+        v: '3.17',
+        libraries: 'weather,geometry,visualization'
+    });
 })
 
 .config(function($stateProvider, $urlRouterProvider) {
@@ -45,10 +53,12 @@ angular.module('mybikelane', ['ionic', 'ngCordova', 'mybikelane.controllers',
     url: "/map",
     views: {
       'menuContent': {
-        templateUrl: "templates/map.html"
+        templateUrl: "templates/map.html",
+        controller: 'MapCtrl'
       }
     }
   })
+
     .state('app.violations', {
       url: "/violations",
       views: {
