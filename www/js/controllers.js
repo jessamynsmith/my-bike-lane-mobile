@@ -49,22 +49,21 @@ angular.module('mybikelane.controllers', [])
       console.log(result);
     };
 
-    $scope.todayDate = new Date();
-    $scope.params = {};
+    $scope.params = {
+      datetime_of_incident: new Date()
+    };
 
     var posOptions = {timeout: 10000, enableHighAccuracy: false};
     $cordovaGeolocation.getCurrentPosition(posOptions).then(function(position) {
-      $scope.params.lat = position.coords.latitude;
-      $scope.params.lon = position.coords.longitude;
+      $scope.params.latitude = position.coords.latitude;
+      $scope.params.longitude = position.coords.longitude;
       var geocoder = new google.maps.Geocoder();
       var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
       geocoder.geocode({'latLng': latlng}, function(results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
-          console.log(results[0].address_components[4].long_name);
-          console.log(results[0].formatted_address);
-          console.log(results[1].formatted_address);
           if (results[0]) {
-            $scope.params.address = results[0].formatted_address;
+            $scope.params.address = results[0].address_components[0].long_name + ' '
+            + results[0].address_components[1].long_name;
             $scope.params.city = results[0].address_components[4].long_name;
           } else {
             console.log('Location not found');

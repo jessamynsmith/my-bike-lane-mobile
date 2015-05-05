@@ -3,9 +3,10 @@
     <form ng-submit="submitViolation()">
       <ion-list>
         <div class="row">
-          <div class="col"><input type="text" placeholder="Enter a title" class="form-control"
-                                  id="title"
-                                  name="title" ng-model="params.title" required></div>
+          <div class="col">
+            <input type="text" placeholder="Enter a title" class="form-control" id="title"
+                   name="title" ng-model="params.title" required>
+          </div>
         </div>
         <div class="row">
           <div class="col">
@@ -21,10 +22,16 @@
         </div>
         <div class="row">
           <div class="col">
-            <input type="text" placeholder="latitude" class="form-control" id="lat"
-                   name="lat" ng-model="params.lat">
-            <input type="text" placeholder="longitude" class="form-control" id="lon"
-                   name="lon" ng-model="params.lon">
+            <input type="text" placeholder="latitude" class="form-control" id="latitude"
+                   name="latitude" ng-model="params.latitude">
+            <input type="text" placeholder="longitude" class="form-control" id="longitude"
+                   name="longitude" ng-model="params.longitude">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <input type="datetime" placeholder="date time" class="form-control" id="datetime_of_incident"
+                   name="datetime_of_incident" ng-model="params.datetime_of_incident">
           </div>
         </div>
         <div class="row">
