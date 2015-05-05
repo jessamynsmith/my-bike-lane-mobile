@@ -43,10 +43,16 @@ angular.module('mybikelane.controllers', [])
     };
 
     $scope.submitViolation = function() {
-      console.log("Submitting...");
+      console.log('Submitting...');
       var violation = new Violation($scope.params);
-      var result = violation.$save();
-      console.log(result);
+      var result = violation.$save().then(function(response) {
+        var violationId = response.id;
+        console.log('Done, created violation ' + violationId);
+        if ($scope.params.imageUri) {
+          console.log($scope.params.imageUri);
+          // TODO Upload photo here
+        }
+      });
     };
 
     $scope.params = {
