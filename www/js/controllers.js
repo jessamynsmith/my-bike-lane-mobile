@@ -33,31 +33,39 @@ angular.module('mybikelane.controllers', [])
     };
   })
 
-  .controller('SubmitCtrl', function($scope, $cordovaGeolocation, Camera, Violation) {
+  .controller('SubmitCtrl', function($scope, $cordovaGeolocation, Camera, Violation, Photo) {
     $scope.getPhoto = function() {
       Camera.getPicture().then(function(imageUri) {
-        $scope.params.imageUri = imageUri;
+        $scope.imageUri = imageUri;
       }, function(err) {
         console.err(err);
       });
     };
 
     $scope.submitViolation = function() {
-      console.log('Submitting...');
+      console.log('Submitting violation...');
       var violation = new Violation($scope.params);
-      var result = violation.$save().then(function(response) {
+      violation.$save().then(function(response) {
         var violationId = response.id;
         console.log('Done, created violation ' + violationId);
-        if ($scope.params.imageUri) {
-          console.log($scope.params.imageUri);
-          // TODO Upload photo here
+        if ($scope.imageUri) {
+          console.log('Submitting photo...' + $scope.imageUri);
+          var photo = new Photo({image: $scope.imageUri, violation_id: violationId});
+          photo.$save().then(function(response) {
+            console.log('Done, created photo ' + response.id);
+          }, function(err) {
+            console.err(err);
+          });
         }
+      }, function(err) {
+        console.err(err);
       });
     };
 
     $scope.params = {
       datetime_of_incident: new Date()
     };
+    $scope.imageUri = null;
 
     var posOptions = {timeout: 10000, enableHighAccuracy: false};
     $cordovaGeolocation.getCurrentPosition(posOptions).then(function(position) {
