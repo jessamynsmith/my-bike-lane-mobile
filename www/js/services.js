@@ -25,8 +25,8 @@ angular.module('mybikelane.services', ['ngResource'])
 
   .factory('Violation', function($resource) {
     return $resource(
-        "http://staging.mybikelane.to/violations/:id.json/",
-        {id: "@id"}
+      "http://staging.mybikelane.to/violations/:id.json/",
+      {id: "@id"}
     );
   });
 

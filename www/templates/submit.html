@@ -3,32 +3,33 @@
     <form ng-submit="submitViolation()">
       <ion-list>
         <div class="row">
-          <div class="col"><input type="text" placeholder="Enter a title" class="form-control" id="title"
-             name="title" ng-model="params.title" required></div>
+          <div class="col"><input type="text" placeholder="Enter a title" class="form-control"
+                                  id="title"
+                                  name="title" ng-model="params.title" required></div>
         </div>
         <div class="row">
           <div class="col">
             <input type="text" placeholder="address" class="form-control" id="address"
-             name="address" ng-model="params.address" maxlength="140">
+                   name="address" ng-model="params.address" maxlength="140">
           </div>
         </div>
         <div class="row">
           <div class="col">
             <input type="text" placeholder="city" class="form-control" id="city"
-             name="city" ng-model="params.city" maxlength="140">
+                   name="city" ng-model="params.city" maxlength="140">
           </div>
         </div>
         <div class="row">
           <div class="col">
             <input type="text" placeholder="latitude" class="form-control" id="lat"
-             name="lat" ng-model="params.lat">
+                   name="lat" ng-model="params.lat">
             <input type="text" placeholder="longitude" class="form-control" id="lon"
-             name="lon" ng-model="params.lon">
+                   name="lon" ng-model="params.lon">
           </div>
         </div>
         <div class="row">
           <div class="col">
-            <img ng-src="{{params.imageUri}}" style="max-width: 100%">
+            <img ng-src="{{ params.imageUri }}" style="max-width: 100%">
           </div>
         </div>
         <div class="row">

@@ -1,20 +1,20 @@
 <ion-view view-title="Violations">
   <ion-content>
     <ion-list>
-          <ion-item type="item-text-wrap">
-            <div class="row">
-              <div class="col">Title</div>
-              <div class="col">Address</div>
-            </div>
-          </ion-item>
+      <ion-item type="item-text-wrap">
+        <div class="row">
+          <div class="col">Title</div>
+          <div class="col">Address</div>
+        </div>
+      </ion-item>
 
-        <ion-item ng-repeat="violation in violations" type="item-text-wrap"
+      <ion-item ng-repeat="violation in violations" type="item-text-wrap"
                 href="#/app/violations/{{ violation.id }}">
         <div class="row">
           <div class="col">{{ violation.title }}</div>
           <div class="col">{{ violation.address }}</div>
         </div>
       </ion-item>
-      </ion-list>
+    </ion-list>
   </ion-content>
 </ion-view>
