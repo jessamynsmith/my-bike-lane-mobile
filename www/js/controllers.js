@@ -33,12 +33,12 @@ angular.module('mybikelane.controllers', [])
     };
   })
 
-  .controller('SubmitCtrl', function($scope, $state, $cordovaGeolocation, Camera, Violation) {
+  .controller('ReportCtrl', function($scope, $state, $cordovaGeolocation, Camera, Violation) {
     $scope.getPhoto = function() {
       Camera.getPicture().then(function(imageUri) {
         $scope.imageUri = imageUri;
       }, function(err) {
-        console.err(err);
+        console.log(err);
       });
     };
 
@@ -75,7 +75,7 @@ angular.module('mybikelane.controllers', [])
         $scope.violationId = response.id;
         console.log('Done, created violation ' + $scope.violationId);
         $scope.upload();
-        $state.go('app.violations');
+        $state.go('tab.violations');
       }, function(error) {
         console.log(error);
       });
@@ -126,9 +126,10 @@ angular.module('mybikelane.controllers', [])
   })
 
   .controller('ViolationsCtrl', function($scope, $stateParams, Violation) {
+    // TODO way of updating violations
     $scope.violations = Violation.query();
   })
 
-  .controller('ViolationCtrl', function($scope, $stateParams, Violation) {
+  .controller('ViolationDetailCtrl', function($scope, $stateParams, Violation) {
     $scope.violation = Violation.get({}, {'id': $stateParams.violationId});
   });

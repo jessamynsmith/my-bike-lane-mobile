@@ -1,4 +1,4 @@
-// Ionic Starter App
+// MyBikeLane App
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'mybikelane' is the name of this angular module example (also set in a <body> attribute in index.html)
@@ -11,12 +11,12 @@ angular.module('mybikelane', ['ionic', 'ui.router', 'ngCordova', 'uiGmapgoogle-m
     $ionicPlatform.ready(function() {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
-      if (window.cordova && window.cordova.plugins.Keyboard) {
+      if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
       }
       if (window.StatusBar) {
         // org.apache.cordova.statusbar required
-        StatusBar.styleDefault();
+        StatusBar.styleLightContent();
       }
     });
   })
@@ -30,54 +30,58 @@ angular.module('mybikelane', ['ionic', 'ui.router', 'ngCordova', 'uiGmapgoogle-m
   })
 
   .config(function($stateProvider, $urlRouterProvider) {
+
     $stateProvider
 
-      .state('app', {
-        url: "/app",
+      // setup an abstract state for the tabs directive
+      .state('tab', {
+        url: "/tab",
         abstract: true,
-        templateUrl: "templates/menu.html",
-        controller: 'AppCtrl'
+        templateUrl: "templates/tabs.html"
       })
 
-      .state('app.submit', {
-        url: "/submit",
+      // Each tab has its own nav history stack:
+
+      .state('tab.report', {
+        url: '/report',
         views: {
-          'menuContent': {
-            templateUrl: "templates/submit.html",
-            controller: 'SubmitCtrl'
+          'tab-report': {
+            templateUrl: 'templates/tab-report.html',
+            controller: 'ReportCtrl'
           }
         }
       })
 
-      .state('app.map', {
-        url: "/map",
+      .state('tab.map', {
+        url: '/map',
         views: {
-          'menuContent': {
-            templateUrl: "templates/map.html",
+          'tab-map': {
+            templateUrl: 'templates/tab-map.html',
             controller: 'MapCtrl'
           }
         }
       })
 
-      .state('app.violations', {
-        url: "/violations",
+      .state('tab.violations', {
+        url: '/violations',
         views: {
-          'menuContent': {
-            templateUrl: "templates/violations.html",
+          'tab-violations': {
+            templateUrl: 'templates/tab-violations.html',
             controller: 'ViolationsCtrl'
           }
         }
       })
-
-      .state('app.violation', {
-        url: "/violations/:violationId",
+      .state('tab.violations-detail', {
+        url: '/violations/:violationId',
         views: {
-          'menuContent': {
-            templateUrl: "templates/violation.html",
-            controller: 'ViolationCtrl'
+          'tab-violations': {
+            templateUrl: 'templates/violation-detail.html',
+            controller: 'ViolationDetailCtrl'
           }
         }
       });
+
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/app/submit');
+    $urlRouterProvider.otherwise('/tab/report');
+
   });
