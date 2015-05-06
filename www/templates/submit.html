@@ -1,6 +1,6 @@
 <ion-view view-title="Submit a Violation">
   <ion-content>
-    <form ng-submit="submitViolation()">
+    <form>
       <ion-list>
         <div class="row">
           <div class="col">
@@ -41,16 +41,14 @@
         </div>
         <div class="row">
           <div class="col">
-            <button class="button button-positive" ng-click="getPhoto()">
-              <i class="icon ion-camera"></i> Take photo
+            <button class="button button-positive icon-right ion-camera" ng-click="getPhoto()">
+              Take photo
             </button>
           </div>
         </div>
         <div class="row">
           <div class="col">
-            <button type="submit" class="button button-positive">
-              Submit
-            </button>
+            <button class="button button-positive" ng-click="submitViolation()">Submit</button>
           </div>
         </div>
       </ion-list>

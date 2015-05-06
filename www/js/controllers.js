@@ -33,7 +33,7 @@ angular.module('mybikelane.controllers', [])
     };
   })
 
-  .controller('SubmitCtrl', function($scope, $cordovaGeolocation, Camera, Violation, Photo) {
+  .controller('SubmitCtrl', function($scope, $state, $cordovaGeolocation, Camera, Violation) {
     $scope.getPhoto = function() {
       Camera.getPicture().then(function(imageUri) {
         $scope.imageUri = imageUri;
@@ -42,23 +42,42 @@ angular.module('mybikelane.controllers', [])
       });
     };
 
+    $scope.upload = function() {
+      console.log("Attempting to upload file");
+      if (!$scope.imageUri) {
+        console.log("No image has been selected");
+        return;
+      }
+      var options = new FileUploadOptions();
+      options.fileKey = "image";
+      options.fileName = $scope.imageUri.substr($scope.imageUri.lastIndexOf('/') + 1);
+      options.mimeType = "image/jpeg";
+      options.params = {};
+      options.params.violation_id = $scope.violationId;
+
+      var ft = new FileTransfer();
+      ft.upload($scope.imageUri, encodeURI('http://staging.mybikelane.to/photos.json'),
+        uploadSuccess, uploadError, options);
+      function uploadSuccess(response) {
+        console.log("Done uploading file");
+      }
+      function uploadError(error) {
+        for (var key in error) {
+          console.log("upload error[" + key +"]=" + error[key]);
+        }
+      }
+    };
+
     $scope.submitViolation = function() {
       console.log('Submitting violation...');
       var violation = new Violation($scope.params);
       violation.$save().then(function(response) {
-        var violationId = response.id;
-        console.log('Done, created violation ' + violationId);
-        if ($scope.imageUri) {
-          console.log('Submitting photo...' + $scope.imageUri);
-          var photo = new Photo({image: $scope.imageUri, violation_id: violationId});
-          photo.$save().then(function(response) {
-            console.log('Done, created photo ' + response.id);
-          }, function(err) {
-            console.err(err);
-          });
-        }
-      }, function(err) {
-        console.err(err);
+        $scope.violationId = response.id;
+        console.log('Done, created violation ' + $scope.violationId);
+        $scope.upload();
+        $state.go('app.violations');
+      }, function(error) {
+        console.log(error);
       });
     };
 
@@ -66,6 +85,7 @@ angular.module('mybikelane.controllers', [])
       datetime_of_incident: new Date()
     };
     $scope.imageUri = null;
+    $scope.violationId = null;
 
     var posOptions = {timeout: 10000, enableHighAccuracy: false};
     $cordovaGeolocation.getCurrentPosition(posOptions).then(function(position) {
