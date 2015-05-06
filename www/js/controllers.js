@@ -42,10 +42,16 @@ angular.module('mybikelane.controllers', [])
       });
     };
 
+    $scope.afterSubmit = function() {
+      // TODO Should clear form and indicate upload success
+      $state.go('tab.violations');
+    };
+
     $scope.upload = function() {
       console.log("Attempting to upload file");
       if (!$scope.imageUri) {
         console.log("No image has been selected");
+        $scope.afterSubmit();
         return;
       }
       var options = new FileUploadOptions();
@@ -60,6 +66,7 @@ angular.module('mybikelane.controllers', [])
         uploadSuccess, uploadError, options);
       function uploadSuccess(response) {
         console.log("Done uploading file");
+        $scope.afterSubmit();
       }
       function uploadError(error) {
         for (var key in error) {
@@ -71,11 +78,11 @@ angular.module('mybikelane.controllers', [])
     $scope.submitViolation = function() {
       console.log('Submitting violation...');
       var violation = new Violation($scope.params);
+      // TODO indicate to user that report is uploading
       violation.$save().then(function(response) {
         $scope.violationId = response.id;
         console.log('Done, created violation ' + $scope.violationId);
         $scope.upload();
-        $state.go('tab.violations');
       }, function(error) {
         console.log(error);
       });
