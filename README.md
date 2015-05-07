@@ -10,6 +10,8 @@ Development
 ionic platform add ios android
 ionic browser add crosswalk
 
+cordova plugin add cordova-plugin-geolocation
+
 ionic serve
 ionic run android
 
