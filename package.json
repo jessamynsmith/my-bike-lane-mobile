@@ -1,6 +1,6 @@
 {
   "name": "my-bike-lane-mobile",
-  "version": "1.0.0",
+  "version": "0.2.0",
   "description": "my-bike-lane: Report parking violations in bike lanes",
   "dependencies": {
     "gulp": "^3.5.6",
