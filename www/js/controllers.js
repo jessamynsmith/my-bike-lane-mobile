@@ -166,7 +166,7 @@ angular.module('mybikelane.controllers', [])
 
     $scope.map = {
       defaults: {
-        tileLayer: '//{s}.tile.osm.org/{z}/{x}/{y}.png',
+        tileLayer: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
         maxZoom: 18,
         zoomControlPosition: 'bottomleft'
       },
