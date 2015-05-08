@@ -56,9 +56,9 @@ angular.module('mybikelane.controllers', [])
     };
 
     $scope.initializeParams = function() {
+      $scope.imageUri = ' ';
       $scope.params = {
         datetime_of_incident: new Date(),
-        imageUri: ' ',
         violationId: null
       };
       $scope.initializeGeolocation();
@@ -76,7 +76,7 @@ angular.module('mybikelane.controllers', [])
     // TODO only show get photo button if camera enabled
     $scope.getPhoto = function() {
       Camera.getPicture().then(function(imageUri) {
-        $scope.params.imageUri = imageUri;
+        $scope.imageUri = imageUri;
       }, function(err) {
         console.log(err);
       });
@@ -93,20 +93,20 @@ angular.module('mybikelane.controllers', [])
 
     $scope.upload = function() {
       console.log("Attempting to upload file");
-      if ($scope.params.imageUri === ' ') {
+      if ($scope.imageUri === ' ') {
         console.log("No image has been selected");
         $scope.afterSubmit();
         return;
       }
       var options = new FileUploadOptions();
       options.fileKey = "image";
-      options.fileName = $scope.params.imageUri.substr($scope.params.imageUri.lastIndexOf('/') + 1);
+      options.fileName = $scope.imageUri.substr($scope.imageUri.lastIndexOf('/') + 1);
       options.mimeType = "image/jpeg";
       options.params = {};
       options.params.violation_id = $scope.params.violationId;
 
       var ft = new FileTransfer();
-      ft.upload($scope.params.imageUri, encodeURI('https://mybikelane-staging.herokuapp.com/photos.json'),
+      ft.upload($scope.imageUri, encodeURI('https://mybikelane-staging.herokuapp.com/photos.json'),
         uploadSuccess, uploadError, options);
       function uploadSuccess(response) {
         console.log("Done uploading file");
