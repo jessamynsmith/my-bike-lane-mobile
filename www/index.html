@@ -5,8 +5,12 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     <title></title>
 
-    <!-- TODO should make this more limited -->
-    <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self' https://*.mybikelane.to http://*.mybikelane.to;
+        style-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com 'unsafe-inline';
+        font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com 'unsafe-inline';
+        img-src 'self' https://*.googleapis.com https://*.gstatic.com http://*.rackcdn.com data: 'unsafe-inline';
+        script-src 'self' https://*.googleapis.com https://*.gstatic.com 'unsafe-inline' 'unsafe-eval'">
 
     <!-- compiled css output -->
     <link href="css/ionic.app.css" rel="stylesheet">
