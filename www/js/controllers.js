@@ -97,7 +97,7 @@ angular.module('mybikelane.controllers', [])
 
     $scope.upload = function() {
       console.log("Attempting to upload file");
-      if (!$scope.params.imageUri) {
+      if ($scope.params.imageUri === ' ') {
         console.log("No image has been selected");
         $scope.afterSubmit();
         return;
@@ -156,8 +156,12 @@ angular.module('mybikelane.controllers', [])
   })
 
   .controller('ViolationsCtrl', function($scope, $stateParams, Violation) {
-    // TODO way of updating violations
     $scope.violations = Violation.query();
+    $scope.doRefresh = function() {
+      $scope.violations = Violation.query();
+      //Stop the ion-refresher from spinning
+      $scope.$broadcast('scroll.refreshComplete');
+    };
   })
 
   .controller('ViolationDetailCtrl', function($scope, $stateParams, Violation) {
