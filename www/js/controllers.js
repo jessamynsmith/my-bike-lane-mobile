@@ -33,42 +33,91 @@ angular.module('mybikelane.controllers', [])
     };
   })
 
-  .controller('ReportCtrl', function($scope, $state, $cordovaGeolocation, Camera, Violation) {
+  .controller('ReportCtrl', function($scope, $state, $cordovaGeolocation, notify,
+                                     Camera, Violation) {
+
+    $scope.initializeGeolocation = function() {
+      var posOptions = {timeout: 10000, enableHighAccuracy: false};
+      $cordovaGeolocation.getCurrentPosition(posOptions).then(function(position) {
+        $scope.params.latitude = position.coords.latitude;
+        $scope.params.longitude = position.coords.longitude;
+        var geocoder = new google.maps.Geocoder();
+        var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        geocoder.geocode({'latLng': latlng}, function(results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            if (results[0]) {
+              $scope.params.address = results[0].address_components[0].long_name + ' '
+              + results[0].address_components[1].long_name;
+              $scope.params.city = results[0].address_components[4].long_name;
+            } else {
+              console.log('Location not found');
+            }
+          } else {
+            console.log('Geocoder failed due to: ' + status);
+          }
+        });
+      }, function(err) {
+        console.log('Error retrieving location: ' + err)
+      });
+    };
+
+    $scope.initializeParams = function() {
+      $scope.params = {
+        datetime_of_incident: new Date(),
+        imageUri: ' ',
+        violationId: null
+      };
+      $scope.initializeGeolocation();
+    };
+
+    $scope.getImageSrc = function(src) {
+      if (src !== "") {
+        return src;
+      } else {
+        return "//:0";
+      }
+    };
+
     $scope.getPhoto = function() {
       Camera.getPicture().then(function(imageUri) {
-        $scope.imageUri = imageUri;
+        $scope.params.imageUri = imageUri;
       }, function(err) {
         console.log(err);
       });
     };
 
     $scope.afterSubmit = function() {
-      // TODO Should clear form and indicate upload success
       $state.go('tab.violations');
+      if ($scope.uploading) {
+        $scope.uploading.close();
+      }
+      notify('Your report has been uploaded.');
+      $scope.initializeParams();
     };
 
     $scope.upload = function() {
       console.log("Attempting to upload file");
-      if (!$scope.imageUri) {
+      if (!$scope.params.imageUri) {
         console.log("No image has been selected");
         $scope.afterSubmit();
         return;
       }
       var options = new FileUploadOptions();
       options.fileKey = "image";
-      options.fileName = $scope.imageUri.substr($scope.imageUri.lastIndexOf('/') + 1);
+      options.fileName = $scope.params.imageUri.substr($scope.params.imageUri.lastIndexOf('/') + 1);
       options.mimeType = "image/jpeg";
       options.params = {};
-      options.params.violation_id = $scope.violationId;
+      options.params.violation_id = $scope.params.violationId;
 
       var ft = new FileTransfer();
-      ft.upload($scope.imageUri, encodeURI('http://staging.mybikelane.to/photos.json'),
+      ft.upload($scope.params.imageUri, encodeURI('http://staging.mybikelane.to/photos.json'),
         uploadSuccess, uploadError, options);
       function uploadSuccess(response) {
         console.log("Done uploading file");
         $scope.afterSubmit();
       }
       function uploadError(error) {
+        notify('Unable to upload your report photo at this time. :(');
         for (var key in error) {
           console.log("upload error[" + key +"]=" + error[key]);
         }
@@ -77,45 +126,19 @@ angular.module('mybikelane.controllers', [])
 
     $scope.submitViolation = function() {
       console.log('Submitting violation...');
+      $scope.uploading = notify('Uploading violation report...');
       var violation = new Violation($scope.params);
-      // TODO indicate to user that report is uploading
       violation.$save().then(function(response) {
-        $scope.violationId = response.id;
+        $scope.params.violationId = response.id;
         console.log('Done, created violation ' + $scope.violationId);
         $scope.upload();
       }, function(error) {
+        notify('Unable to upload your report at this time. :(');
         console.log(error);
       });
     };
 
-    $scope.params = {
-      datetime_of_incident: new Date()
-    };
-    $scope.imageUri = null;
-    $scope.violationId = null;
-
-    var posOptions = {timeout: 10000, enableHighAccuracy: false};
-    $cordovaGeolocation.getCurrentPosition(posOptions).then(function(position) {
-      $scope.params.latitude = position.coords.latitude;
-      $scope.params.longitude = position.coords.longitude;
-      var geocoder = new google.maps.Geocoder();
-      var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-      geocoder.geocode({'latLng': latlng}, function(results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
-          if (results[0]) {
-            $scope.params.address = results[0].address_components[0].long_name + ' '
-            + results[0].address_components[1].long_name;
-            $scope.params.city = results[0].address_components[4].long_name;
-          } else {
-            console.log('Location not found');
-          }
-        } else {
-          console.log('Geocoder failed due to: ' + status);
-        }
-      });
-    }, function(err) {
-      console.log('Error retrieving location: ' + err)
-    });
+    $scope.initializeParams();
   })
 
   .controller('MapCtrl', function($scope, $cordovaGeolocation) {

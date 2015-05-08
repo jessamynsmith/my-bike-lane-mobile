@@ -1,6 +1,6 @@
 <ion-view view-title="Submit a Violation">
   <ion-content>
-    <form>
+    <form ng-submit="submitViolation()">
       <ion-list>
         <div class="row">
           <div class="col">
@@ -36,7 +36,7 @@
         </div>
         <div class="row">
           <div class="col">
-            <img ng-src="{{ imageUri }}" style="max-width: 100%">
+            <img ng-show="params.imageUri!==' '" ng-src="{{ params.imageUri }}" style="max-width: 100%">
           </div>
         </div>
         <div class="row">
@@ -48,7 +48,7 @@
         </div>
         <div class="row">
           <div class="col">
-            <button class="button button-positive" ng-click="submitViolation()">Submit</button>
+            <button type="submit" class="button button-positive">Submit</button>
           </div>
         </div>
       </ion-list>
