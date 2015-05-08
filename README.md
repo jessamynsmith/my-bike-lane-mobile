@@ -16,3 +16,11 @@ ionic serve
 ionic run android
 
 ./create_apks.sh
+
+Heroku
+------
+
+heroku addons:create newrelic:wayne
+heroku addons:create papertrail:chokla
+
+heroku config:set NODE_ENV=production
