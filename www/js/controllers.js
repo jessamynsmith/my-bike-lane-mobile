@@ -41,23 +41,17 @@ angular.module('mybikelane.controllers', [])
       $cordovaGeolocation.getCurrentPosition(posOptions).then(function(position) {
         $scope.params.latitude = position.coords.latitude;
         $scope.params.longitude = position.coords.longitude;
-        var geocoder = new google.maps.Geocoder();
-        var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-        geocoder.geocode({'latLng': latlng}, function(results, status) {
-          if (status == google.maps.GeocoderStatus.OK) {
-            if (results[0]) {
-              $scope.params.address = results[0].address_components[0].long_name + ' ' +
-                results[0].address_components[1].long_name;
-              $scope.params.city = results[0].address_components[4].long_name;
+        var geocoder = L.Control.Geocoder.nominatim();
+        geocoder.reverse({lat: position.coords.latitude, lng: position.coords.longitude}, 10,
+          function(results) {
+            if (results[0].properties.address) {
+              $scope.params.address = results[0].properties.address.house_number + ' ' +
+              results[0].properties.address.road;
+              $scope.params.city = results[0].properties.address.city;
             } else {
               console.log('Location not found');
             }
-          } else {
-            console.log('Geocoder failed due to: ' + status);
-          }
-        });
-      }, function(err) {
-        console.log('Error retrieving location: ' + err);
+          });
       });
     };
 
@@ -118,10 +112,11 @@ angular.module('mybikelane.controllers', [])
         console.log("Done uploading file");
         $scope.afterSubmit();
       }
+
       function uploadError(error) {
         notify('Unable to upload your report photo at this time. :(');
         for (var key in error) {
-          console.log("upload error[" + key +"]=" + error[key]);
+          console.log("upload error[" + key + "]=" + error[key]);
         }
       }
     };
@@ -144,17 +139,52 @@ angular.module('mybikelane.controllers', [])
   })
 
   .controller('MapCtrl', function($scope, $cordovaGeolocation) {
-    var posOptions = {timeout: 10000, enableHighAccuracy: false};
-    $cordovaGeolocation.getCurrentPosition(posOptions).then(function(position) {
-      $scope.map = {
-        center: {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude
-        }, zoom: 15
-      };
-    }, function(err) {
-      console.log('Error retrieving location: ' + err);
-    });
+    $scope.locate = function() {
+
+      $cordovaGeolocation
+        .getCurrentPosition()
+        .then(function(position) {
+          $scope.map.center = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+            zoom: 15
+          };
+
+          $scope.map.markers.now = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+            message: "You Are Here",
+            focus: true,
+            draggable: false
+          };
+
+        }, function(err) {
+          console.log('Error retrieving location: ' + err);
+        });
+    };
+
+    $scope.map = {
+      defaults: {
+        tileLayer: '//{s}.tile.osm.org/{z}/{x}/{y}.png',
+        maxZoom: 18,
+        zoomControlPosition: 'bottomleft'
+      },
+      center: {
+        // Default to downtown Toronto
+        lat: 43.6722780,
+        lng: -79.3745125,
+        zoom: 14
+      },
+      markers: {},
+      events: {
+        map: {
+          enable: ['context'],
+          logic: 'emit'
+        }
+      }
+    };
+
+    $scope.locate();
   })
 
   .controller('ViolationsCtrl', function($scope, $stateParams, Violation) {

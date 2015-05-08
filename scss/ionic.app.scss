@@ -22,10 +22,6 @@ $ionicons-font-path: "../lib/ionic/release/fonts" !default;
 @import "www/lib/ionic/scss/ionic";
 
 // Custom styles
-.angular-google-map-container {
-  height: 400px;
-}
-
 input {
   border: 1px #C0C0C0 solid;
   width: 100%;
@@ -37,4 +33,12 @@ input {
 
 .violation_photo {
    width: 100%;
+}
+
+.scroll, .angular-leaflet-map {
+  height: 100%;
+}
+
+.leaflet-bottom {
+  bottom : 10px;
 }
