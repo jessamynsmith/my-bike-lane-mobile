@@ -112,7 +112,7 @@ angular.module('mybikelane.controllers', [])
       options.params.violation_id = $scope.params.violationId;
 
       var ft = new FileTransfer();
-      ft.upload($scope.params.imageUri, encodeURI('http://staging.mybikelane.to/photos.json'),
+      ft.upload($scope.params.imageUri, encodeURI('https://mybikelane-staging.herokuapp.com/photos.json'),
         uploadSuccess, uploadError, options);
       function uploadSuccess(response) {
         console.log("Done uploading file");
