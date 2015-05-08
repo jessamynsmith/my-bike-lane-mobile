@@ -11,6 +11,7 @@ ionic platform add ios android
 ionic browser add crosswalk
 
 cordova plugin add cordova-plugin-geolocation
+cordova plugin add cordova-plugin-whitelist
 
 ionic serve
 ionic run android

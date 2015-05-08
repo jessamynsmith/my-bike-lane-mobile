@@ -102,6 +102,7 @@ angular.module('mybikelane.controllers', [])
       options.fileKey = "image";
       options.fileName = $scope.imageUri.substr($scope.imageUri.lastIndexOf('/') + 1);
       options.mimeType = "image/jpeg";
+      options.chunkedMode = false; // Absolutely required for https uploads!
       options.params = {};
       options.params.violation_id = $scope.params.violationId;
 
