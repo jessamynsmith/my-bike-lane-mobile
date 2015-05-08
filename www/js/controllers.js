@@ -41,7 +41,7 @@ angular.module('mybikelane.controllers', [])
       $cordovaGeolocation.getCurrentPosition(posOptions).then(function(position) {
         $scope.params.latitude = position.coords.latitude;
         $scope.params.longitude = position.coords.longitude;
-        var geocoder = L.Control.Geocoder.nominatim();
+        var geocoder = L.Control.Geocoder.nominatim({serviceUrl: 'https://nominatim.openstreetmap.org/'});
         geocoder.reverse({lat: position.coords.latitude, lng: position.coords.longitude}, 10,
           function(results) {
             if (results[0].properties.address) {
