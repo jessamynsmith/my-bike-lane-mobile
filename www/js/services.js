@@ -20,7 +20,7 @@ angular.module('mybikelane.services', ['ngResource'])
 
         return q.promise;
       }
-    }
+    };
   }])
 
   .factory('Violation', function($resource) {
