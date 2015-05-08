@@ -1,5 +1,5 @@
 {
-  "name": "my-bike-lane-mobile",
+  "name": "MyBikeLane",
   "app_id": "",
   "gulpStartupTasks": [
     "sass",

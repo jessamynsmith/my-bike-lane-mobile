@@ -1,5 +1,5 @@
 {
-  "name": "my-bike-lane-mobile",
+  "name": "MyBikeLane",
   "private": "true",
   "dependencies": {
     "angular": "~1.3.13",
