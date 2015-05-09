@@ -13,7 +13,11 @@
         <div class="col">Description:</div>
         <div class="col">{{ violation.description }}</div>
       </div>
-      <div class="margin_10"><img class="violation_photo" ng-show="violation.photo_url" src="{{ violation.photo_url }}"></div>
+      <ion-item ng-repeat="photo_url in violation.photo_urls">
+        <div>
+          <img class="violation_photo" ng-show="photo_url" src="{{ photo_url }}">
+        </div>
+      </ion-item>
     </ion-list>
   </ion-content>
 </ion-view>
