@@ -2,18 +2,17 @@
   <ion-content>
     <ion-refresher on-refresh="doRefresh()"></ion-refresher>
     <ion-list>
-      <ion-item type="item-text-wrap">
+      <ion-item>
         <div class="row">
           <div class="col">Title</div>
           <div class="col">Address</div>
         </div>
       </ion-item>
 
-      <ion-item ng-repeat="violation in violations" type="item-text-wrap"
-                href="#/tab/violations/{{ violation.id }}">
+      <ion-item ng-repeat="violation in violations" href="#/tab/violations/{{ violation.id }}">
         <div class="row">
-          <div class="col">{{ violation.title }}</div>
-          <div class="col">{{ violation.address }}</div>
+          <div class="col wrap">{{ violation.title }}</div>
+          <div class="col wrap">{{ violation.address }}</div>
         </div>
       </ion-item>
     </ion-list>
