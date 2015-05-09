@@ -248,6 +248,13 @@ angular.module('mybikelane.controllers', [])
     };
   })
 
-  .controller('ViolationDetailCtrl', function($scope, $stateParams, Violation) {
+  .controller('ViolationDetailCtrl', function($scope, $ionicHistory, $state, $stateParams, Violation) {
+    $scope.goToViolations = function() {
+      $ionicHistory.nextViewOptions({
+        historyRoot: true,
+        disableBack: true
+      });
+      $state.go('tab.violations');
+    };
     $scope.violation = Violation.get({}, {'id': $stateParams.violationId});
   });
