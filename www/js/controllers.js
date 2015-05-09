@@ -205,6 +205,9 @@ angular.module('mybikelane.controllers', [])
     $scope.locate();
 
     var violations = Violation.query(function() {
+      var getScope = function() {
+        return $scope;
+      };
       for (var i = 0; i < violations.length; i++) {
         $scope.map.markers[violations[i].id] = {
           lat: violations[i].latitude,
@@ -212,7 +215,7 @@ angular.module('mybikelane.controllers', [])
           icon: local_icons.red_icon,
           message: '<span ng-click="goToViolation(\'' + violations[i].id + '\')">' +
           violations[i].title + '</span>',
-          getMessageScope: function() {return $scope; },
+          getMessageScope: getScope,
           draggable: false
         };
       }
