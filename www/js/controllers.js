@@ -1,6 +1,7 @@
 angular.module('mybikelane.controllers', [])
 
   .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+    // TODO enable login
     // Form data for the login modal
     $scope.loginData = {};
 
