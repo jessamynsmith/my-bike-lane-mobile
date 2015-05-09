@@ -139,7 +139,7 @@ angular.module('mybikelane.controllers', [])
     $scope.initializeParams();
   })
 
-  .controller('MapCtrl', function($scope, $cordovaGeolocation, Violation) {
+  .controller('MapCtrl', function($scope, $state, $cordovaGeolocation, Violation) {
     $scope.locate = function() {
 
       $cordovaGeolocation
@@ -154,7 +154,7 @@ angular.module('mybikelane.controllers', [])
           $scope.map.markers.now = {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
-            focus: true,
+            message: 'You are here!',
             draggable: false
           };
 
@@ -166,8 +166,10 @@ angular.module('mybikelane.controllers', [])
     var local_icons = {
         default_icon: {},
         red_icon: {
-            iconUrl: 'img/red-icon.png',
-            shadowUrl: 'lib/leaflet/dist/images/marker-shadow.png'
+          iconUrl: 'img/red-icon.png',
+          shadowUrl: 'lib/leaflet/dist/images/marker-shadow.png',
+          iconAnchor: [12, 41],
+          popupAnchor: [1, -34]
         }
     };
 
@@ -196,15 +198,21 @@ angular.module('mybikelane.controllers', [])
       }
     };
 
+    $scope.goToViolation = function(violationId) {
+      $state.go('tab.violations-detail', {violationId: violationId});
+    };
+
     $scope.locate();
 
     var violations = Violation.query(function() {
-      console.log(violations.length);
       for (var i = 0; i < violations.length; i++) {
         $scope.map.markers[violations[i].id] = {
           lat: violations[i].latitude,
           lng: violations[i].longitude,
           icon: local_icons.red_icon,
+          message: '<span ng-click="goToViolation(\'' + violations[i].id + '\')">' +
+          violations[i].title + '</span>',
+          getMessageScope: function() {return $scope; },
           draggable: false
         };
       }
