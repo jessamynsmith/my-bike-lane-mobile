@@ -139,7 +139,7 @@ angular.module('mybikelane.controllers', [])
     $scope.initializeParams();
   })
 
-  .controller('MapCtrl', function($scope, $cordovaGeolocation) {
+  .controller('MapCtrl', function($scope, $cordovaGeolocation, Violation) {
     $scope.locate = function() {
 
       $cordovaGeolocation
@@ -154,7 +154,6 @@ angular.module('mybikelane.controllers', [])
           $scope.map.markers.now = {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
-            message: "You Are Here",
             focus: true,
             draggable: false
           };
@@ -163,6 +162,18 @@ angular.module('mybikelane.controllers', [])
           console.log('Error retrieving location: ' + err);
         });
     };
+
+    var local_icons = {
+        default_icon: {},
+        red_icon: {
+            iconUrl: 'img/red-icon.png',
+            shadowUrl: 'lib/leaflet/dist/images/marker-shadow.png'
+        }
+    };
+
+    angular.extend($scope, {
+        icons: local_icons
+    });
 
     $scope.map = {
       defaults: {
@@ -186,6 +197,19 @@ angular.module('mybikelane.controllers', [])
     };
 
     $scope.locate();
+
+    var violations = Violation.query(function() {
+      console.log(violations.length);
+      for (var i = 0; i < violations.length; i++) {
+        $scope.map.markers[violations[i].id] = {
+          lat: violations[i].latitude,
+          lng: violations[i].longitude,
+          icon: local_icons.red_icon,
+          draggable: false
+        };
+      }
+    });
+
   })
 
   .controller('ViolationsCtrl', function($scope, $stateParams, Violation) {
