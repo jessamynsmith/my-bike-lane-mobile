@@ -34,8 +34,8 @@ angular.module('mybikelane.controllers', [])
     };
   })
 
-  .controller('ReportCtrl', function($scope, $state, $cordovaGeolocation, notify,
-                                     Camera, Violation) {
+  .controller('ReportCtrl', function($scope, $state, $ionicScrollDelegate, $cordovaGeolocation,
+                                     notify, Camera, Violation) {
 
     $scope.initializeGeolocation = function() {
       notify('Finding your location...');
@@ -127,6 +127,7 @@ angular.module('mybikelane.controllers', [])
       if (!$scope.params.title) {
         console.log('You must enter a title.');
         notify('You must enter a title');
+        $ionicScrollDelegate.scrollTop(false);
         return;
       }
       console.log('Submitting violation...');
