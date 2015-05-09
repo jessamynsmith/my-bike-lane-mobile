@@ -43,6 +43,25 @@ input {
   bottom: 10px;
 }
 
+.title {
+  font-weight: bold;
+  margin-left: -10px;
+}
+
+.description {
+  font-weight: bold;
+  margin-left: 14px;
+}
+
+.item-complex > a.item-content {
+  padding: 0;
+}
+
 div.wrap {
   white-space: normal;
+}
+
+.thumbnail {
+  max-height: 50px;
+  max-width: 50px;
 }

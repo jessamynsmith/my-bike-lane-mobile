@@ -4,15 +4,17 @@
     <ion-list>
       <ion-item>
         <div class="row">
-          <div class="col">Title</div>
-          <div class="col">Address</div>
+          <div class="col col-20"></div>
+          <div class="col col-40 title">Title</div>
+          <div class="col col-40 description">Address</div>
         </div>
       </ion-item>
 
       <ion-item ng-repeat="violation in violations" href="#/tab/violations/{{ violation.id }}">
         <div class="row">
-          <div class="col wrap">{{ violation.title }}</div>
-          <div class="col wrap">{{ violation.address }}</div>
+          <div class="col col-20"><img class="thumbnail" ng-src="{{ violation.photo_urls[0] }}"></div>
+          <div class="col col-40 wrap">{{ violation.title }}</div>
+          <div class="col col-40 wrap">{{ violation.address }}</div>
         </div>
       </ion-item>
     </ion-list>
