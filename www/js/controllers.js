@@ -124,6 +124,11 @@ angular.module('mybikelane.controllers', [])
     };
 
     $scope.submitViolation = function() {
+      if (!$scope.params.title) {
+        console.log('You must enter a title.');
+        notify('You must enter a title');
+        return;
+      }
       console.log('Submitting violation...');
       $scope.uploading = notify('Uploading violation report...');
       var violation = new Violation($scope.params);
