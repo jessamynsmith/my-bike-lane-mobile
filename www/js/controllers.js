@@ -38,6 +38,7 @@ angular.module('mybikelane.controllers', [])
                                      Camera, Violation) {
 
     $scope.initializeGeolocation = function() {
+      notify('Finding your location...');
       var posOptions = {timeout: 10000, enableHighAccuracy: false};
       $cordovaGeolocation.getCurrentPosition(posOptions).then(function(position) {
         $scope.params.latitude = position.coords.latitude;
