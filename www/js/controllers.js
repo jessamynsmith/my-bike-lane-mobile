@@ -72,10 +72,9 @@ angular.module('mybikelane.controllers', [])
       }
     };
 
-    // TODO allow user to attach photo from docs
-    // TODO only show get photo button if camera enabled
+    // TODO allow user to attach photo from docs, if possible
     $scope.getPhoto = function() {
-      Camera.getPicture().then(function(imageUri) {
+      Camera.getPicture({}, notify).then(function(imageUri) {
         $scope.imageUri = imageUri;
       }, function(err) {
         console.log(err);

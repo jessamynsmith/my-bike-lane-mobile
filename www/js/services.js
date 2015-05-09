@@ -3,11 +3,12 @@ angular.module('mybikelane.services', ['ngResource'])
   .factory('Camera', ['$q', function($q) {
 
     return {
-      getPicture: function(options) {
+      getPicture: function(options, notify) {
         var q = $q.defer();
 
         if (!navigator.camera) {
           console.log('Camera is not available');
+          notify('Camera is not available');
           return q.promise;
         }
 
