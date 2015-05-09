@@ -139,24 +139,31 @@ angular.module('mybikelane.controllers', [])
   })
 
   .controller('MapCtrl', function($scope, $state, $cordovaGeolocation, Violation) {
-    $scope.locate = function() {
 
+    $scope.latitude = null;
+    $scope.longitude = null;
+
+    $scope.addCurrentPositionMarker = function() {
+      $scope.map.markers.currentPosition = {
+        lat: $scope.latitude,
+        lng: $scope.longitude,
+        message: 'You are here!',
+        draggable: false
+      };
+    };
+
+    $scope.locate = function() {
       $cordovaGeolocation
         .getCurrentPosition()
         .then(function(position) {
+          $scope.latitude = position.coords.latitude;
+          $scope.longitude = position.coords.longitude;
           $scope.map.center = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
+            lat: $scope.latitude,
+            lng: $scope.longitude,
             zoom: 15
           };
-
-          $scope.map.markers.now = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-            message: 'You are here!',
-            draggable: false
-          };
-
+          $scope.addCurrentPositionMarker();
         }, function(err) {
           console.log('Error retrieving location: ' + err);
         });
@@ -201,25 +208,33 @@ angular.module('mybikelane.controllers', [])
       $state.go('tab.violations-detail', {violationId: violationId});
     };
 
-    $scope.locate();
-
-    var violations = Violation.query(function() {
-      var getScope = function() {
-        return $scope;
-      };
-      for (var i = 0; i < violations.length; i++) {
-        $scope.map.markers[violations[i].id] = {
-          lat: violations[i].latitude,
-          lng: violations[i].longitude,
-          icon: local_icons.red_icon,
-          message: '<span ng-click="goToViolation(\'' + violations[i].id + '\')">' +
-          violations[i].title + '</span>',
-          getMessageScope: getScope,
-          draggable: false
+    $scope.loadMarkers = function() {
+      var violations = Violation.query(function() {
+        var getScope = function() {
+          return $scope;
         };
-      }
-    });
+        for (var i = 0; i < violations.length; i++) {
+          $scope.map.markers[violations[i].id] = {
+            lat: violations[i].latitude,
+            lng: violations[i].longitude,
+            icon: local_icons.red_icon,
+            message: '<span ng-click="goToViolation(\'' + violations[i].id + '\')">' +
+            violations[i].title + '</span>',
+            getMessageScope: getScope,
+            draggable: false
+          };
+        }
+      });
+    };
 
+    $scope.reloadMarkers = function() {
+      $scope.map.markers = {};
+      $scope.addCurrentPositionMarker();
+      $scope.loadMarkers();
+    };
+
+    $scope.locate();
+    $scope.loadMarkers();
   })
 
   .controller('ViolationsCtrl', function($scope, $stateParams, Violation) {
