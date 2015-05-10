@@ -35,11 +35,23 @@ angular.module('mybikelane.controllers', [])
   })
 
   .controller('ReportCtrl', function($scope, $state, $ionicScrollDelegate, $cordovaGeolocation,
-                                     notify, Camera, Violation) {
+                                     ngNotify, Camera, Violation) {
+
+    $scope.$on('$ionicView.enter', function() {
+      if (!$scope.params.latitude) {
+        $scope.initializeGeolocation();
+      }
+    });
+
+    ngNotify.config({
+      theme: 'pure',
+      position: 'top',
+      duration: 2000
+    });
+    ngNotify.addType('notify', 'notify');
 
     $scope.initializeGeolocation = function() {
-      // TODO Style notifications, change timeouts
-      notify('Finding your location...');
+      ngNotify.set('Finding your location...', {type: 'notify', sticky: true});
       var posOptions = {timeout: 10000, enableHighAccuracy: false};
       $cordovaGeolocation.getCurrentPosition(posOptions).then(function(position) {
         $scope.params.latitude = position.coords.latitude;
@@ -51,8 +63,11 @@ angular.module('mybikelane.controllers', [])
               $scope.params.address = results[0].properties.address.house_number + ' ' +
               results[0].properties.address.road;
               $scope.params.city = results[0].properties.address.city;
+              ngNotify.dismiss();
             } else {
               console.log('Location not found');
+              ngNotify.dismiss();
+              ngNotify.set('Unable to find your location', 'error');
             }
           });
       });
@@ -64,6 +79,10 @@ angular.module('mybikelane.controllers', [])
         datetime_of_incident: new Date(),
         violationId: null
       };
+    };
+
+    $scope.resetForm = function() {
+      $scope.initializeParams();
       $scope.initializeGeolocation();
     };
 
@@ -77,7 +96,7 @@ angular.module('mybikelane.controllers', [])
 
     // TODO allow user to attach photo from docs, if possible
     $scope.getPhoto = function() {
-      Camera.getPicture({}, notify).then(function(imageUri) {
+      Camera.getPicture({}, ngNotify).then(function(imageUri) {
         $scope.imageUri = imageUri;
       }, function(err) {
         console.log(err);
@@ -86,10 +105,8 @@ angular.module('mybikelane.controllers', [])
 
     $scope.afterSubmit = function() {
       $state.go('tab.violations');
-      if ($scope.uploading) {
-        $scope.uploading.close();
-      }
-      notify('Your report has been uploaded.');
+      ngNotify.dismiss();
+      ngNotify.set('Your report has been uploaded.', 'success');
       $scope.initializeParams();
     };
 
@@ -115,9 +132,8 @@ angular.module('mybikelane.controllers', [])
         console.log("Done uploading file");
         $scope.afterSubmit();
       }
-
       function uploadError(error) {
-        notify('Unable to upload your report photo at this time. :(');
+        ngNotify.set('Unable to upload your report photo at this time. :(', 'error');
         for (var key in error) {
           console.log("upload error[" + key + "]=" + error[key]);
         }
@@ -127,19 +143,20 @@ angular.module('mybikelane.controllers', [])
     $scope.submitViolation = function() {
       if (!$scope.params.title) {
         console.log('You must enter a title.');
-        notify('You must enter a title');
+        ngNotify.set('You must enter a title', 'error');
         $ionicScrollDelegate.scrollTop(false);
         return;
       }
       console.log('Submitting violation...');
-      $scope.uploading = notify('Uploading violation report...');
+      ngNotify.set('Uploading violation report...', {type: 'notify', sticky: 'true'});
       var violation = new Violation($scope.params);
       violation.$save().then(function(response) {
         $scope.params.violationId = response.id;
         console.log('Done, created violation ' + $scope.violationId);
         $scope.upload();
       }, function(error) {
-        notify('Unable to upload your report at this time. :(');
+        ngNotify.dismiss();
+        ngNotify.set('Unable to upload your report at this time. :(', 'error');
         console.log(error);
       });
     };

@@ -4,7 +4,7 @@
 // 'mybikelane' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'mybikelane.controllers' is found in controllers.js
-angular.module('mybikelane', ['ionic', 'ui.router', 'ngCordova', 'cgNotify', 'leaflet-directive',
+angular.module('mybikelane', ['ionic', 'ui.router', 'ngCordova', 'ngNotify', 'leaflet-directive',
   'mybikelane.controllers', 'mybikelane.services'])
 
   .run(function($ionicPlatform) {
