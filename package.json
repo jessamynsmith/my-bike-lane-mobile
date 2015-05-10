@@ -1,6 +1,6 @@
 {
   "name": "MyBikeLane",
-  "version": "0.2.3",
+  "version": "0.2.5",
   "description": "my-bike-lane: Report parking violations in bike lanes",
   "engines": {
     "node": "0.12.x"
