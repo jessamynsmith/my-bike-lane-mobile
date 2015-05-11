@@ -1,6 +1,9 @@
 input {
-  border: 1px #C0C0C0 solid;
   width: 100%;
+}
+
+.hidden {
+  display: none;
 }
 
 .margin_10 {

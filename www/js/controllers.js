@@ -35,9 +35,10 @@ angular.module('mybikelane.controllers', [])
   })
 
   .controller('ReportCtrl', function($scope, $state, $ionicScrollDelegate, $cordovaGeolocation,
-                                     ngNotify, Camera, Violation) {
+                                     ngNotify, Camera, Violation, HtmlElement) {
 
     $scope.$on('$ionicView.enter', function() {
+      $ionicScrollDelegate.scrollTop(false);
       if (!$scope.params.latitude) {
         $scope.initializeGeolocation();
       }
@@ -75,6 +76,7 @@ angular.module('mybikelane.controllers', [])
 
     $scope.initializeParams = function() {
       $scope.imageUri = ' ';
+      $scope.attachedFile = null;
       $scope.params = {
         datetime_of_incident: new Date(),
         violationId: null
@@ -86,22 +88,29 @@ angular.module('mybikelane.controllers', [])
       $scope.initializeGeolocation();
     };
 
-    $scope.getImageSrc = function(src) {
-      if (src !== "") {
-        return src;
-      } else {
-        return "//:0";
-      }
-    };
-
-    // TODO allow user to attach photo from docs, if possible
     $scope.getPhoto = function() {
       Camera.getPicture({}, ngNotify).then(function(imageUri) {
         $scope.imageUri = imageUri;
+        $scope.attachedFile = null;
       }, function(err) {
         console.log(err);
       });
     };
+
+    HtmlElement.getById('input', 'attach').addEventListener('change', function (e) {
+      readURL(this);
+    });
+
+    function readURL(input) {
+      if (input.files && input.files[0]) {
+        $scope.attachedFile = input.files[0];
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          $scope.imageUri = e.target.result;
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
 
     $scope.afterSubmit = function() {
       $state.go('tab.violations');
@@ -112,22 +121,11 @@ angular.module('mybikelane.controllers', [])
 
     $scope.upload = function() {
       console.log("Attempting to upload file");
-      if ($scope.imageUri === ' ') {
+      if ($scope.imageUri === ' ' && !$scope.attachedFile) {
         console.log("No image has been selected");
         $scope.afterSubmit();
         return;
       }
-      var options = new FileUploadOptions();
-      options.fileKey = "image";
-      options.fileName = $scope.imageUri.substr($scope.imageUri.lastIndexOf('/') + 1);
-      options.mimeType = "image/jpeg";
-      options.chunkedMode = false; // Absolutely required for https uploads!
-      options.params = {};
-      options.params.violation_id = $scope.params.violationId;
-
-      var ft = new FileTransfer();
-      ft.upload($scope.imageUri, encodeURI('https://mybikelane-staging.herokuapp.com/photos.json'),
-        uploadSuccess, uploadError, options);
       function uploadSuccess(response) {
         console.log("Done uploading file");
         $scope.afterSubmit();
@@ -137,6 +135,22 @@ angular.module('mybikelane.controllers', [])
         for (var key in error) {
           console.log("upload error[" + key + "]=" + error[key]);
         }
+      }
+
+      if ($scope.attachedFile) {
+        console.log('Uploading of attached files is not yet implemented');
+      } else {
+        var options = new FileUploadOptions();
+        options.fileKey = "image";
+        options.fileName = $scope.imageUri.substr($scope.imageUri.lastIndexOf('/') + 1);
+        options.mimeType = "image/jpeg";
+        options.chunkedMode = false; // Absolutely required for https uploads!
+        options.params = {};
+        options.params.violation_id = $scope.params.violationId;
+
+        var ft = new FileTransfer();
+        ft.upload($scope.imageUri, encodeURI('https://mybikelane-staging.herokuapp.com/photos.json'),
+          uploadSuccess, uploadError, options);
       }
     };
 
