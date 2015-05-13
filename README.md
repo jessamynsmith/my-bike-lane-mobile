@@ -15,7 +15,7 @@ Development
     cordova plugin add org.apache.cordova.file
     cordova plugin add org.apache.cordova.file-transfer
     cordova plugin add cordova-plugin-geolocation
-    cordova plugin add cordova-plugin-whitelist
+    cordova plugin add https://github.com/apache/cordova-plugin-whitelist.git
 
     ionic serve
     ionic run android

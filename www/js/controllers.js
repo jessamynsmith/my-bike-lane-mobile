@@ -53,7 +53,7 @@ angular.module('mybikelane.controllers', [])
 
     $scope.initializeGeolocation = function() {
       ngNotify.set('Finding your location...', {type: 'notify', sticky: true});
-      var posOptions = {timeout: 10000, enableHighAccuracy: false};
+      var posOptions = {timeout: 5000, enableHighAccuracy: false};
       $cordovaGeolocation.getCurrentPosition(posOptions).then(function(position) {
         $scope.params.latitude = position.coords.latitude;
         $scope.params.longitude = position.coords.longitude;
@@ -193,8 +193,9 @@ angular.module('mybikelane.controllers', [])
     };
 
     $scope.locate = function() {
+      var posOptions = {timeout: 5000, enableHighAccuracy: false};
       $cordovaGeolocation
-        .getCurrentPosition()
+        .getCurrentPosition(posOptions)
         .then(function(position) {
           $scope.latitude = position.coords.latitude;
           $scope.longitude = position.coords.longitude;
