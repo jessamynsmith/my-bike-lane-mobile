@@ -2,7 +2,7 @@
 
 # Do once
 #cordova plugin rm org.apache.cordova.console
-#keytool -genkey -v -keystore $KEYSTORE_HOME/taotrack-release-key.keystore -alias taotrack -keyalg RSA -keysize 2048 -validity 10000
+#keytool -genkey -v -keystore $KEYSTORE_HOME/mybikelane-release-key.keystore -alias mybikelane -keyalg RSA -keysize 2048 -validity 10000
 
 
 cordova build --release android

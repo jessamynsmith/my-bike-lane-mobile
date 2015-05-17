@@ -10,12 +10,12 @@ Development
     ionic platform add ios android
     ionic browser add crosswalk
 
-    cordova plugin add org.apache.cordova.camera
-    cordova plugin add org.apache.cordova.device
-    cordova plugin add org.apache.cordova.file
-    cordova plugin add org.apache.cordova.file-transfer
-    cordova plugin add cordova-plugin-geolocation
-    cordova plugin add https://github.com/apache/cordova-plugin-whitelist.git
+    ionic plugin add org.apache.cordova.camera
+    ionic plugin add org.apache.cordova.device
+    ionic plugin add org.apache.cordova.file
+    ionic plugin add org.apache.cordova.file-transfer
+    ionic plugin add cordova-plugin-geolocation
+    ionic plugin add https://github.com/apache/cordova-plugin-whitelist.git
 
     ionic serve
     ionic run android

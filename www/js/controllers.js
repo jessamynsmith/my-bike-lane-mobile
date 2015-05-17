@@ -61,8 +61,9 @@ angular.module('mybikelane.controllers', [])
         geocoder.reverse({lat: position.coords.latitude, lng: position.coords.longitude}, 10,
           function(results) {
             if (results[0].properties.address) {
+              // TODO replace .properties with get()?
               $scope.params.address = results[0].properties.address.house_number + ' ' +
-              results[0].properties.address.road;
+                results[0].properties.address.road;
               $scope.params.city = results[0].properties.address.city;
               ngNotify.dismiss();
             } else {
@@ -97,7 +98,7 @@ angular.module('mybikelane.controllers', [])
       });
     };
 
-    HtmlElement.getById('input', 'attach').addEventListener('change', function (e) {
+    HtmlElement.getById('input', 'attach').addEventListener('change', function(e) {
       readURL(this);
     });
 
@@ -211,17 +212,17 @@ angular.module('mybikelane.controllers', [])
     };
 
     var local_icons = {
-        default_icon: {},
-        red_icon: {
-          iconUrl: 'img/red-icon.png',
-          shadowUrl: 'lib/leaflet/dist/images/marker-shadow.png',
-          iconAnchor: [12, 41],
-          popupAnchor: [1, -34]
-        }
+      default_icon: {},
+      red_icon: {
+        iconUrl: 'img/red-icon.png',
+        shadowUrl: 'lib/leaflet/dist/images/marker-shadow.png',
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34]
+      }
     };
 
     angular.extend($scope, {
-        icons: local_icons
+      icons: local_icons
     });
 
     $scope.map = {

@@ -30,7 +30,11 @@
     "org.apache.cordova.console",
     "com.ionic.keyboard",
     "org.apache.cordova.splashscreen",
-    "cordova-plugin-whitelist"
+    "cordova-plugin-whitelist",
+    "org.apache.cordova.file-transfer",
+    "org.apache.cordova.camera",
+    "org.apache.cordova.file",
+    "cordova-plugin-geolocation"
   ],
   "cordovaPlatforms": [
     {
