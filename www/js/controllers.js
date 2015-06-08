@@ -155,7 +155,7 @@ angular.module('mybikelane.controllers', [])
         options.params.violation_id = $scope.params.violationId;
 
         var ft = new FileTransfer();
-        ft.upload($scope.imageUri, encodeURI('https://mybikelane-staging.herokuapp.com/photos.json'),
+        ft.upload($scope.imageUri, encodeURI('http://www.mybikelane.to/photos.json'),
           uploadSuccess, uploadError, options);
       }
     };

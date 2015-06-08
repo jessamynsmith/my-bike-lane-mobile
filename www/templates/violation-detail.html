@@ -27,7 +27,7 @@
       </div>
       <ion-item ng-repeat="photo_url in violation.photo_urls">
         <div>
-          <img class="violation_photo" ng-show="photo_url" src="{{ photo_url }}">
+          <img class="violation_photo" ng-show="photo_url" ng-src="{{ photo_url }}">
         </div>
       </ion-item>
     </ion-list>

@@ -21,7 +21,7 @@ angular.module('mybikelane.services', ['ngResource'])
 
   .factory('Violation', function($resource) {
     return $resource(
-      "https://mybikelane-staging.herokuapp.com/violations/:id.json/",
+      "http://www.mybikelane.to/violations/:id.json/",
       {id: "@id"}
     );
   })
