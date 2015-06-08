@@ -38,8 +38,10 @@ angular.module('mybikelane.controllers', [])
                                      ngNotify, Camera, Violation, HtmlElement) {
 
     $scope.$on('$ionicView.enter', function() {
+      console.log("Entered view, latitude=" + $scope.params.latitude);
       $ionicScrollDelegate.scrollTop(false);
       if (!$scope.params.latitude) {
+        console.log("Initializing geolocation");
         $scope.initializeGeolocation();
       }
     });
@@ -52,14 +54,17 @@ angular.module('mybikelane.controllers', [])
     ngNotify.addType('notify', 'notify');
 
     $scope.initializeGeolocation = function() {
+      console.log("Inside initializeGeolocation");
       ngNotify.set('Finding your location...', {type: 'notify', sticky: true});
       var posOptions = {timeout: 5000, enableHighAccuracy: false};
       $cordovaGeolocation.getCurrentPosition(posOptions).then(function(position) {
+        console.log("Got location: " + JSON.stringify(position));
         $scope.params.latitude = position.coords.latitude;
         $scope.params.longitude = position.coords.longitude;
         var geocoder = L.Control.Geocoder.nominatim({serviceUrl: 'https://nominatim.openstreetmap.org/'});
         geocoder.reverse({lat: position.coords.latitude, lng: position.coords.longitude}, 10,
           function(results) {
+            console.log("Did reverse lookup, got: " + JSON.stringify(results));
             if (results[0].properties.address) {
               // TODO replace .properties with get()?
               $scope.params.address = results[0].properties.address.house_number + ' ' +
