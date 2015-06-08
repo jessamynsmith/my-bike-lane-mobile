@@ -35,7 +35,7 @@ angular.module('mybikelane.controllers', [])
   })
 
   .controller('ReportCtrl', function($scope, $state, $ionicScrollDelegate, $cordovaGeolocation,
-                                     ngNotify, Camera, Violation, HtmlElement) {
+                                     ngNotify, ApiUrl, Camera, Violation, HtmlElement) {
 
     $scope.$on('$ionicView.enter', function() {
       console.log("Entered view, latitude=" + $scope.params.latitude);
@@ -155,7 +155,7 @@ angular.module('mybikelane.controllers', [])
         options.params.violation_id = $scope.params.violationId;
 
         var ft = new FileTransfer();
-        ft.upload($scope.imageUri, encodeURI('http://www.mybikelane.to/photos.json'),
+        ft.upload($scope.imageUri, encodeURI(ApiUrl.get() + '/photos.json'),
           uploadSuccess, uploadError, options);
       }
     };

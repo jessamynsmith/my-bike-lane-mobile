@@ -1,5 +1,17 @@
 angular.module('mybikelane.services', ['ngResource'])
 
+  .factory('ApiUrl', function() {
+    return {
+      get: function() {
+        // TODO make this an app setting?
+        // Production
+        return 'http://www.mybikelane.to';
+        // Staging
+        //return 'https://mybikelane-staging.herokuapp.com';
+      }
+    };
+  })
+
   .factory('Camera', ['$q', function($q) {
     return {
       getPicture: function(options, ngNotify) {
@@ -19,9 +31,9 @@ angular.module('mybikelane.services', ['ngResource'])
     };
   }])
 
-  .factory('Violation', function($resource) {
+  .factory('Violation', function(ApiUrl, $resource) {
     return $resource(
-      "http://www.mybikelane.to/violations/:id.json/",
+      ApiUrl.get() + "/violations/:id.json/",
       {id: "@id"}
     );
   })
