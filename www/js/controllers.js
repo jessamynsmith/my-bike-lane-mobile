@@ -34,8 +34,8 @@ angular.module('mybikelane.controllers', [])
     };
   })
 
-  .controller('ReportCtrl', function($scope, $state, $ionicScrollDelegate, $cordovaGeolocation,
-                                     ngNotify, ApiUrl, Camera, Violation, HtmlElement) {
+  .controller('ReportCtrl', function($scope, $state, $ionicScrollDelegate, ngNotify,
+                                     ApiUrl, Geolocation, Camera, Violation, HtmlElement) {
 
     $scope.$on('$ionicView.enter', function() {
       console.log("Entered view, latitude=" + $scope.params.latitude);
@@ -56,27 +56,15 @@ angular.module('mybikelane.controllers', [])
     $scope.initializeGeolocation = function() {
       console.log("Inside initializeGeolocation");
       ngNotify.set('Finding your location...', {type: 'notify', sticky: true});
-      var posOptions = {timeout: 5000, enableHighAccuracy: false};
-      $cordovaGeolocation.getCurrentPosition(posOptions).then(function(position) {
-        console.log("Got location: " + JSON.stringify(position));
-        $scope.params.latitude = position.coords.latitude;
-        $scope.params.longitude = position.coords.longitude;
-        var geocoder = L.Control.Geocoder.nominatim({serviceUrl: 'https://nominatim.openstreetmap.org/'});
-        geocoder.reverse({lat: position.coords.latitude, lng: position.coords.longitude}, 10,
-          function(results) {
-            console.log("Did reverse lookup, got: " + JSON.stringify(results));
-            if (results[0].properties.address) {
-              // TODO replace .properties with get()?
-              $scope.params.address = results[0].properties.address.house_number + ' ' +
-                results[0].properties.address.road;
-              $scope.params.city = results[0].properties.address.city;
-              ngNotify.dismiss();
-            } else {
-              console.log('Location not found');
-              ngNotify.dismiss();
-              ngNotify.set('Unable to find your location', 'error');
-            }
-          });
+      Geolocation.get().then(function(locationData) {
+        $scope.params.latitude = locationData.latitude;
+        $scope.params.longitude = locationData.longitude;
+        $scope.params.address = locationData.address;
+        $scope.params.city = locationData.city;
+        ngNotify.dismiss();
+      }, function(err) {
+        ngNotify.dismiss();
+        ngNotify.set('Unable to find your location', 'error');
       });
     };
 
