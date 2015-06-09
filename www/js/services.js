@@ -38,10 +38,12 @@ angular.module('mybikelane.services', ['ngResource'])
                 data.city = result.address.city;
               } else {
                 console.log('Location not found');
-                //q.reject('Location not found');
               }
               q.resolve(data);
             });
+        }, function(err) {
+          console.log('Unable to get current position');
+          q.reject('Unable to get current position');
         });
         return q.promise;
       }
