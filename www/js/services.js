@@ -23,7 +23,7 @@ angular.module('mybikelane.services', ['ngResource'])
           address: '',
           city: ''
         };
-        var posOptions = {timeout: 5000, enableHighAccuracy: false};
+        var posOptions = {timeout: 10000, enableHighAccuracy: false};
         $cordovaGeolocation.getCurrentPosition(posOptions).then(function(position) {
           console.log("Got location: " + JSON.stringify(position));
           data.latitude = position.coords.latitude;
