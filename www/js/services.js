@@ -42,7 +42,7 @@ angular.module('mybikelane.services', ['ngResource'])
               q.resolve(data);
             });
         }, function(err) {
-          console.log('Unable to get current position');
+          console.log('Unable to get current position: ' + JSON.stringify(err));
           q.reject('Unable to get current position');
         });
         return q.promise;
