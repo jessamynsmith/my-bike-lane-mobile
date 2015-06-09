@@ -7,7 +7,15 @@
 angular.module('mybikelane', ['ionic', 'ui.router', 'ngCordova', 'ngNotify', 'leaflet-directive',
   'mybikelane.controllers', 'mybikelane.services'])
 
-  .run(function($ionicPlatform) {
+  .run(function($ionicPlatform, ngNotify) {
+
+    ngNotify.config({
+      theme: 'pure',
+      position: 'top',
+      duration: 2000
+    });
+    ngNotify.addType('notify', 'notify');
+
     $ionicPlatform.ready(function() {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)

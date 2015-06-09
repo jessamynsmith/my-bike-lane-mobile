@@ -8,6 +8,6 @@
     "ionic": "v1.0.0",
     "leaflet-control-geocoder": "~1.1.0",
     "ngCordova": "~0.1.15-alpha",
-    "ng-notify": "~0.5.2"
+    "ng-notify": "~0.6.2"
   }
 }

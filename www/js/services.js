@@ -56,7 +56,7 @@ angular.module('mybikelane.services', ['ngResource'])
         var q = $q.defer();
         if (!navigator.camera) {
           console.log('Camera is not available');
-          ngNotify.set('Camera is not available', 'error');
+          ngNotify.set('Camera is not available', {type: 'error'});
         } else {
           navigator.camera.getPicture(function(result) {
             q.resolve(result);

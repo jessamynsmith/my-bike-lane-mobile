@@ -46,25 +46,18 @@ angular.module('mybikelane.controllers', [])
       }
     });
 
-    ngNotify.config({
-      theme: 'pure',
-      position: 'top',
-      duration: 2000
-    });
-    ngNotify.addType('notify', 'notify');
-
     $scope.initializeGeolocation = function() {
       console.log("Inside initializeGeolocation");
-      ngNotify.set('Finding your location...', {type: 'notify', sticky: true});
+      ngNotify.set('Finding your location...', {type: 'notify', duration: 5000});
       Geolocation.get().then(function(locationData) {
+        ngNotify.dismiss();
         $scope.params.latitude = locationData.latitude;
         $scope.params.longitude = locationData.longitude;
         $scope.params.address = locationData.address;
         $scope.params.city = locationData.city;
-        ngNotify.dismiss();
       }, function(err) {
         ngNotify.dismiss();
-        ngNotify.set('Unable to find current location. Is Location enabled?', 'error');
+        ngNotify.set('Unable to find current location. Is Location enabled?', {type: 'error'});
       });
     };
 
@@ -109,7 +102,7 @@ angular.module('mybikelane.controllers', [])
     $scope.afterSubmit = function() {
       $state.go('tab.violations');
       ngNotify.dismiss();
-      ngNotify.set('Your report has been uploaded.', 'success');
+      ngNotify.set('Your report has been uploaded.', {type: 'success'});
       $scope.initializeParams();
     };
 
@@ -125,7 +118,7 @@ angular.module('mybikelane.controllers', [])
         $scope.afterSubmit();
       }
       function uploadError(error) {
-        ngNotify.set('Unable to upload your report photo at this time. :(', 'error');
+        ngNotify.set('Unable to upload your report photo at this time.', {type: 'error'});
         for (var key in error) {
           console.log("upload error[" + key + "]=" + error[key]);
         }
@@ -151,12 +144,12 @@ angular.module('mybikelane.controllers', [])
     $scope.submitViolation = function() {
       if (!$scope.params.title) {
         console.log('You must enter a title.');
-        ngNotify.set('You must enter a title', 'error');
+        ngNotify.set('You must enter a title', {type: 'error'});
         $ionicScrollDelegate.scrollTop(false);
         return;
       }
       console.log('Submitting violation...');
-      ngNotify.set('Uploading violation report...', {type: 'notify', sticky: 'true'});
+      ngNotify.set('Uploading violation report...', {type: 'notify', duration: 5000});
       var violation = new Violation($scope.params);
       violation.$save().then(function(response) {
         $scope.params.violationId = response.id;
@@ -164,7 +157,7 @@ angular.module('mybikelane.controllers', [])
         $scope.upload();
       }, function(error) {
         ngNotify.dismiss();
-        ngNotify.set('Unable to upload your report at this time. :(', 'error');
+        ngNotify.set('Unable to upload your report at this time.', {type: 'error'});
         console.log(error);
       });
     };
