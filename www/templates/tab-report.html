@@ -10,7 +10,8 @@
         </div>
         <div class="row">
           <div class="col">
-            <input type="text" placeholder="finding street address..." class="form-control" id="address"
+            <input type="text" placeholder="finding street address..." class="form-control"
+                   id="address"
                    name="address" ng-model="params.address" maxlength="140">
           </div>
         </div>
@@ -24,13 +25,15 @@
           <div class="col">
             <input type="text" placeholder="finding latitude..." class="form-control" id="latitude"
                    name="latitude" ng-model="params.latitude">
-            <input type="text" placeholder="finding longitude..." class="form-control" id="longitude"
+            <input type="text" placeholder="finding longitude..." class="form-control"
+                   id="longitude"
                    name="longitude" ng-model="params.longitude">
           </div>
         </div>
         <div class="row">
           <div class="col">
-            <input type="datetime" placeholder="date time" class="form-control" id="datetime_of_incident"
+            <input type="datetime" placeholder="date time" class="form-control"
+                   id="datetime_of_incident"
                    name="datetime_of_incident" ng-model="params.datetime_of_incident">
           </div>
         </div>
@@ -41,22 +44,28 @@
         </div>
         <div class="row">
           <div class="col">
-            <button class="button button-positive icon-left ion-camera" ng-click="getPhoto()">
+            <button class="button button-block button-positive icon-left ion-camera" ng-click="getPhoto()">
               Take photo
             </button>
+          </div>
+          <div class="col">
             <input id="attach" type="file" accept="image/*" class="hidden">
             <label for="attach" data-tap-disabled="true"
-                   class="button button-positive icon-left ion-paperclip">Attach Photo</label>
+                   class="button button-block button-positive icon-left ion-paperclip">Attach Photo</label>
           </div>
         </div>
         <div class="row">
           <div class="col">
-            <button class="button button-positive icon-left ion-loop"
-                    ng-click="resetForm()">Reset Form</button>
+            <button class="button button-block button-positive icon-left ion-loop"
+                    ng-click="resetForm()">Reset Form
+            </button>
+          </div>
+          <div class="col">
             <!-- This action has to be on the button; when it's on form submit,
             clicking any button submits the form -->
-            <button type="submit" class="button button-positive icon-left ion-upload"
-                    ng-click="submitViolation()">Submit</button>
+            <button type="submit" class="button button-block button-positive icon-left ion-upload"
+                    ng-click="submitViolation()">Submit
+            </button>
           </div>
         </div>
       </ion-list>

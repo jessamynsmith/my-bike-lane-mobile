@@ -10,27 +10,12 @@ input {
   margin: 10px;
 }
 
-/* This is mostly duplicated from ngNotify */
-.ngn {
-  color: #FFF;
-  cursor: default;
-  display: none;
-  left: 0;
-  opacity: 1;
-  padding: 12px 80px;
-  position: fixed;
-  right: 0;
-  text-align: center;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  z-index: 9999;
+.button.button-block, .button.button-full {
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
-.notify {
+.ngn-notify {
   background-color: #FAD232;
 }
 

@@ -11,10 +11,9 @@ angular.module('mybikelane', ['ionic', 'ui.router', 'ngCordova', 'ngNotify', 'le
 
     ngNotify.config({
       theme: 'pure',
-      position: 'top',
       duration: 2000
     });
-    ngNotify.addType('notify', 'notify');
+    ngNotify.addType('notify', 'ngn-notify');
 
     $ionicPlatform.ready(function() {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
