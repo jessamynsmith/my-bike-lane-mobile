@@ -64,7 +64,7 @@ angular.module('mybikelane.controllers', [])
         ngNotify.dismiss();
       }, function(err) {
         ngNotify.dismiss();
-        ngNotify.set('Unable to find your location', 'error');
+        ngNotify.set('Unable to find current location. Is Location enabled?', 'error');
       });
     };
 
