@@ -25,7 +25,6 @@ Development
 Heroku
 ------
 
-heroku addons:create newrelic:wayne
 heroku addons:create papertrail:chokla
 
 heroku config:set NODE_ENV=production

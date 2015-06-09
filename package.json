@@ -12,8 +12,7 @@
     "gulp-concat": "^2.2.0",
     "gulp-minify-css": "^0.3.0",
     "gulp-rename": "^1.2.0",
-    "heroku-ssl-redirect": "0.0.3",
-    "newrelic": "^1.18.3"
+    "heroku-ssl-redirect": "0.0.3"
   },
   "devDependencies": {
     "bower": "^1.3.3",
