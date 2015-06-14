@@ -34,8 +34,8 @@ angular.module('mybikelane.controllers', [])
     };
   })
 
-  .controller('ReportCtrl', function($scope, $state, $ionicScrollDelegate, $cordovaCamera, ngNotify,
-                                     ApiUrl, Geolocation, Violation, HtmlElement) {
+  .controller('ReportCtrl', function($scope, $state, $ionicScrollDelegate, ngNotify,
+                                     Photo, Geolocation, Violation) {
 
     $scope.$on('$ionicView.enter', function() {
       console.log("Entered view, latitude=" + $scope.params.latitude);
@@ -77,40 +77,19 @@ angular.module('mybikelane.controllers', [])
     };
 
     $scope.takePicture = function() {
-      var options = {
-        quality: 50,
-        destinationType: Camera.DestinationType.FILE_URL,
-        sourceType: Camera.PictureSourceType.CAMERA
-      };
-      $cordovaCamera.getPicture(options).then(
-        function(imageData) {
-          console.log("Took photo");
-          $scope.imageViewData = imageData;
-          $scope.imageUploadData = imageData;
-        },
-        function(error) {
-          console.log("Failed to take photo: " + JSON.stringify(error));
-        });
+      Photo.takePicture(ngNotify).then(function(imageData) {
+        $scope.imageViewData = imageData;
+        $scope.imageUploadData = imageData;
+      });
     };
 
     $scope.selectPicture = function() {
-      var options = {
-        quality: 50,
-        destinationType: Camera.DestinationType.FILE_URI,
-        sourceType: Camera.PictureSourceType.PHOTOLIBRARY
-      };
-
-      $cordovaCamera.getPicture(options).then(
-        function(imageURI) {
-          console.log("Got photo from library");
-          $scope.imageViewData = ' ';
+      Photo.selectPicture(ngNotify).then(function(imageURI) {
+        $scope.imageViewData = ' ';
           $scope.imageUploadData = imageURI;
           var image = document.getElementById('reportImage');
           image.src = imageURI;
-        },
-        function(error) {
-          console.log("Failed to get photo from library: " + JSON.stringify(error));
-        });
+      });
     };
 
     $scope.afterSubmit = function() {
@@ -121,36 +100,9 @@ angular.module('mybikelane.controllers', [])
     };
 
     $scope.uploadPicture = function() {
-      console.log("Attempting to upload file");
-      if (!$scope.imageUploadData) {
-        console.log("No image has been selected");
+      Photo.uploadPicture(ngNotify, $scope.params.violationId, $scope.imageUploadData).then(function(response) {
         $scope.afterSubmit();
-        return;
-      }
-
-      function uploadSuccess(response) {
-        console.log("Done uploading file");
-        $scope.afterSubmit();
-      }
-
-      function uploadError(error) {
-        ngNotify.set('Unable to upload your report photo at this time.', {type: 'error'});
-        for (var key in error) {
-          console.log("upload error[" + key + "]=" + error[key]);
-        }
-      }
-
-      var options = new FileUploadOptions();
-      options.fileKey = "image";
-      options.fileName = "report.jpg";
-      options.mimeType = "image/jpeg";
-      options.chunkedMode = false; // Absolutely required for https uploads!
-      options.params = {};
-      options.params.violation_id = $scope.params.violationId;
-
-      var ft = new FileTransfer();
-      ft.upload($scope.imageUploadData, encodeURI(ApiUrl.get() + '/photos.json'),
-        uploadSuccess, uploadError, options);
+      });
     };
 
     $scope.submitViolation = function() {
