@@ -39,8 +39,8 @@
         </div>
         <div class="row">
           <div class="col">
-            <img ng-show="imageData.startsWith('file:///')" ng-src="{{ imageData }}" style="max-width: 100%">
-            <img id="reportImage" ng-show="imageData.startsWith('content:')" src=" " style="max-width: 100%">
+            <img ng-show="imageViewData!==' '" ng-src="{{ imageViewData }}" style="max-width: 100%">
+            <img id="reportImage" ng-show="imageViewData===' '&&imageUploadData" src=" " style="max-width: 100%">
           </div>
         </div>
         <div class="row">

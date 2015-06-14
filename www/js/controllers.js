@@ -62,7 +62,8 @@ angular.module('mybikelane.controllers', [])
     };
 
     $scope.initializeParams = function() {
-      $scope.imageData = ' ';
+      $scope.imageViewData = ' ';
+      $scope.imageUploadData = null;
       $scope.params = {
         datetime_of_incident: new Date(),
         violationId: null,
@@ -84,7 +85,8 @@ angular.module('mybikelane.controllers', [])
       $cordovaCamera.getPicture(options).then(
         function(imageData) {
           console.log("Took photo");
-          $scope.imageData = imageData;
+          $scope.imageViewData = imageData;
+          $scope.imageUploadData = imageData;
         },
         function(error) {
           console.log("Failed to take photo: " + JSON.stringify(error));
@@ -101,9 +103,10 @@ angular.module('mybikelane.controllers', [])
       $cordovaCamera.getPicture(options).then(
         function(imageURI) {
           console.log("Got photo from library");
-            $scope.imageData = imageURI;
-            var image = document.getElementById('reportImage');
-            image.src = imageURI;
+          $scope.imageViewData = ' ';
+          $scope.imageUploadData = imageURI;
+          var image = document.getElementById('reportImage');
+          image.src = imageURI;
         },
         function(error) {
           console.log("Failed to get photo from library: " + JSON.stringify(error));
@@ -119,7 +122,7 @@ angular.module('mybikelane.controllers', [])
 
     $scope.uploadPicture = function() {
       console.log("Attempting to upload file");
-      if ($scope.imageData === ' ') {
+      if (!$scope.imageUploadData) {
         console.log("No image has been selected");
         $scope.afterSubmit();
         return;
@@ -137,7 +140,6 @@ angular.module('mybikelane.controllers', [])
         }
       }
 
-      var fileURL = $scope.imageData;
       var options = new FileUploadOptions();
       options.fileKey = "image";
       options.fileName = "report.jpg";
@@ -147,7 +149,7 @@ angular.module('mybikelane.controllers', [])
       options.params.violation_id = $scope.params.violationId;
 
       var ft = new FileTransfer();
-      ft.upload($scope.imageData, encodeURI(ApiUrl.get() + '/photos.json'),
+      ft.upload($scope.imageUploadData, encodeURI(ApiUrl.get() + '/photos.json'),
         uploadSuccess, uploadError, options);
     };
 
