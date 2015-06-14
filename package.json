@@ -30,9 +30,9 @@
     "org.apache.cordova.splashscreen",
     "cordova-plugin-whitelist",
     "org.apache.cordova.file-transfer",
-    "org.apache.cordova.camera",
     "org.apache.cordova.file",
-    "cordova-plugin-geolocation"
+    "cordova-plugin-geolocation",
+    "cordova-plugin-camera"
   ],
   "cordovaPlatforms": [
     "android"

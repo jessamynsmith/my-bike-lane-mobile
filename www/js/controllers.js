@@ -34,8 +34,8 @@ angular.module('mybikelane.controllers', [])
     };
   })
 
-  .controller('ReportCtrl', function($scope, $state, $ionicScrollDelegate, ngNotify,
-                                     ApiUrl, Geolocation, Camera, Violation, HtmlElement) {
+  .controller('ReportCtrl', function($scope, $state, $ionicScrollDelegate, $cordovaCamera, ngNotify,
+                                     ApiUrl, Geolocation, Violation, HtmlElement) {
 
     $scope.$on('$ionicView.enter', function() {
       console.log("Entered view, latitude=" + $scope.params.latitude);
@@ -62,11 +62,11 @@ angular.module('mybikelane.controllers', [])
     };
 
     $scope.initializeParams = function() {
-      $scope.imageUri = ' ';
-      $scope.attachedFile = null;
+      $scope.imageData = ' ';
       $scope.params = {
         datetime_of_incident: new Date(),
-        violationId: null
+        violationId: null,
+        latitude: null
       };
     };
 
@@ -75,29 +75,40 @@ angular.module('mybikelane.controllers', [])
       $scope.initializeGeolocation();
     };
 
-    $scope.getPhoto = function() {
-      Camera.getPicture({}, ngNotify).then(function(imageUri) {
-        $scope.imageUri = imageUri;
-        $scope.attachedFile = null;
-      }, function(err) {
-        console.log(err);
-      });
+    $scope.takePicture = function() {
+      var options = {
+        quality: 50,
+        destinationType: Camera.DestinationType.FILE_URL,
+        sourceType: Camera.PictureSourceType.CAMERA
+      };
+      $cordovaCamera.getPicture(options).then(
+        function(imageData) {
+          console.log("Took photo");
+          $scope.imageData = imageData;
+        },
+        function(error) {
+          console.log("Failed to take photo: " + JSON.stringify(error));
+        });
     };
 
-    HtmlElement.getById('input', 'attach').addEventListener('change', function(e) {
-      readURL(this);
-    });
+    $scope.selectPicture = function() {
+      var options = {
+        quality: 50,
+        destinationType: Camera.DestinationType.FILE_URI,
+        sourceType: Camera.PictureSourceType.PHOTOLIBRARY
+      };
 
-    function readURL(input) {
-      if (input.files && input.files[0]) {
-        $scope.attachedFile = input.files[0];
-        var reader = new FileReader();
-        reader.onload = function(e) {
-          $scope.imageUri = e.target.result;
-        };
-        reader.readAsDataURL(input.files[0]);
-      }
-    }
+      $cordovaCamera.getPicture(options).then(
+        function(imageURI) {
+          console.log("Got photo from library");
+            $scope.imageData = imageURI;
+            var image = document.getElementById('reportImage');
+            image.src = imageURI;
+        },
+        function(error) {
+          console.log("Failed to get photo from library: " + JSON.stringify(error));
+        });
+    };
 
     $scope.afterSubmit = function() {
       $state.go('tab.violations');
@@ -106,17 +117,19 @@ angular.module('mybikelane.controllers', [])
       $scope.initializeParams();
     };
 
-    $scope.upload = function() {
+    $scope.uploadPicture = function() {
       console.log("Attempting to upload file");
-      if ($scope.imageUri === ' ' && !$scope.attachedFile) {
+      if ($scope.imageData === ' ') {
         console.log("No image has been selected");
         $scope.afterSubmit();
         return;
       }
+
       function uploadSuccess(response) {
         console.log("Done uploading file");
         $scope.afterSubmit();
       }
+
       function uploadError(error) {
         ngNotify.set('Unable to upload your report photo at this time.', {type: 'error'});
         for (var key in error) {
@@ -124,21 +137,18 @@ angular.module('mybikelane.controllers', [])
         }
       }
 
-      if ($scope.attachedFile) {
-        console.log('Uploading of attached files is not yet implemented');
-      } else {
-        var options = new FileUploadOptions();
-        options.fileKey = "image";
-        options.fileName = $scope.imageUri.substr($scope.imageUri.lastIndexOf('/') + 1);
-        options.mimeType = "image/jpeg";
-        options.chunkedMode = false; // Absolutely required for https uploads!
-        options.params = {};
-        options.params.violation_id = $scope.params.violationId;
+      var fileURL = $scope.imageData;
+      var options = new FileUploadOptions();
+      options.fileKey = "image";
+      options.fileName = "report.jpg";
+      options.mimeType = "image/jpeg";
+      options.chunkedMode = false; // Absolutely required for https uploads!
+      options.params = {};
+      options.params.violation_id = $scope.params.violationId;
 
-        var ft = new FileTransfer();
-        ft.upload($scope.imageUri, encodeURI(ApiUrl.get() + '/photos.json'),
-          uploadSuccess, uploadError, options);
-      }
+      var ft = new FileTransfer();
+      ft.upload($scope.imageData, encodeURI(ApiUrl.get() + '/photos.json'),
+        uploadSuccess, uploadError, options);
     };
 
     $scope.submitViolation = function() {
@@ -153,8 +163,8 @@ angular.module('mybikelane.controllers', [])
       var violation = new Violation($scope.params);
       violation.$save().then(function(response) {
         $scope.params.violationId = response.id;
-        console.log('Done, created violation ' + $scope.violationId);
-        $scope.upload();
+        console.log('Done, created violation ' + $scope.params.violationId);
+        $scope.uploadPicture();
       }, function(error) {
         ngNotify.dismiss();
         ngNotify.set('Unable to upload your report at this time.', {type: 'error'});

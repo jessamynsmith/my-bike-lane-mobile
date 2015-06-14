@@ -39,19 +39,22 @@
         </div>
         <div class="row">
           <div class="col">
-            <img ng-show="imageUri!==' '" ng-src="{{ imageUri }}" style="max-width: 100%">
+            <img ng-show="imageData.startsWith('file:///')" ng-src="{{ imageData }}" style="max-width: 100%">
+            <img id="reportImage" ng-show="imageData.startsWith('content:')" src=" " style="max-width: 100%">
           </div>
         </div>
         <div class="row">
           <div class="col">
-            <button class="button button-block button-positive icon-left ion-camera" ng-click="getPhoto()">
+            <button class="button button-block button-positive icon-left ion-camera"
+                    ng-click="takePicture();">
               Take photo
             </button>
           </div>
           <div class="col">
-            <input id="attach" type="file" accept="image/*" class="hidden">
-            <label for="attach" data-tap-disabled="true"
-                   class="button button-block button-positive icon-left ion-paperclip">Attach Photo</label>
+            <button class="button button-block button-positive icon-left ion-folder"
+                    ng-click="selectPicture();">
+              Choose photo
+            </button>
           </div>
         </div>
         <div class="row">
