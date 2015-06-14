@@ -113,7 +113,7 @@ angular.module('mybikelane.controllers', [])
         return;
       }
       console.log('Submitting violation...');
-      ngNotify.set('Uploading violation report...', {type: 'notify', duration: 5000});
+      ngNotify.set('Uploading violation report...', {type: 'notify', duration: 20000});
       var violation = new Violation($scope.params);
       violation.$save().then(function(response) {
         $scope.params.violationId = response.id;
