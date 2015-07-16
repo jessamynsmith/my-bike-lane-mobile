@@ -7,7 +7,8 @@ Ionic mobile app to track bike lane violations.
 Development
 -----------
 
-    ionic platform add ios android
+    ionic platform add ios
+    ionic platform add android
     ionic browser add crosswalk
 
     ionic plugin add org.apache.cordova.camera
