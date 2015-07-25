@@ -1,11 +1,13 @@
 var gulp = require('gulp');
 var gutil = require('gulp-util');
 var bower = require('bower');
-var concat = require('gulp-concat');
 var sass = require('gulp-sass');
 var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
+var replace = require('gulp-replace-task');
 var sh = require('shelljs');
+var args = require('yargs').argv;
+var fs = require('fs');
 
 var paths = {
   sass: ['./scss/**/*.scss']
@@ -22,7 +24,7 @@ gulp.task('sass', function(done) {
     .pipe(minifyCss({
       keepSpecialComments: 0
     }))
-    .pipe(rename({ extname: '.min.css' }))
+    .pipe(rename({extname: '.min.css'}))
     .pipe(gulp.dest('./www/css/'))
     .on('end', done);
 });
@@ -49,4 +51,26 @@ gulp.task('git-check', function(done) {
     process.exit(1);
   }
   done();
+});
+
+gulp.task('constants', function() {
+  // Get the environment from the command line
+  var env = args.env || 'production';
+
+  // Read the settings from the right file
+  var filename = env + '.json';
+  var settings = JSON.parse(fs.readFileSync('./config/' + filename, 'utf8'));
+  gutil.log(settings);
+
+  // Replace each placeholder with the correct value for the variable.
+  gulp.src('config/constants.js')
+    .pipe(replace({
+      patterns: [
+        {
+          match: 'apiUrl',
+          replacement: settings.apiUrl
+        }
+      ]
+    }))
+    .pipe(gulp.dest('www/js/'));
 });

@@ -1,16 +1,4 @@
-angular.module('mybikelane.services', ['ngResource'])
-
-  .factory('ApiUrl', function() {
-    return {
-      get: function() {
-        // TODO make this an app setting?
-        // Production
-        return 'http://www.mybikelane.to';
-        // Staging
-        //return 'https://mybikelane-staging.herokuapp.com';
-      }
-    };
-  })
+angular.module('mybikelane.services', ['ngResource', 'mybikelane.constants'])
 
   .factory('Geolocation', ['$q', '$cordovaGeolocation', function($q, $cordovaGeolocation) {
     return {
@@ -50,7 +38,7 @@ angular.module('mybikelane.services', ['ngResource'])
     };
   }])
 
-  .factory('Photo', function($q, $cordovaCamera, ApiUrl) {
+  .factory('Photo', function($q, $cordovaCamera, apiUrl) {
     return {
       takePicture: function(ngNotify) {
         var q = $q.defer();
@@ -77,6 +65,7 @@ angular.module('mybikelane.services', ['ngResource'])
         return q.promise;
       },
       selectPicture: function(ngNotify) {
+        // TODO combine above and this into a single function
         var q = $q.defer();
         if (typeof Camera === 'undefined') {
           var error = 'Camera is not available';
@@ -112,7 +101,7 @@ angular.module('mybikelane.services', ['ngResource'])
         options.params.violation_id = violationId;
 
         var ft = new FileTransfer();
-        ft.upload(imageData, encodeURI(ApiUrl.get() + '/photos.json'),
+        ft.upload(imageData, encodeURI(apiUrl + '/photos.json'),
           function(response) {
             console.log("Done uploading file");
             q.resolve(response);
@@ -129,9 +118,9 @@ angular.module('mybikelane.services', ['ngResource'])
     };
   })
 
-  .factory('Violation', function(ApiUrl, $resource) {
+  .factory('Violation', function(apiUrl, $resource) {
     return $resource(
-      ApiUrl.get() + "/violations/:id.json/",
+      apiUrl + "/violations/:id.json/",
       {id: "@id"}
     );
   })

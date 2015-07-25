@@ -86,9 +86,9 @@ angular.module('mybikelane.controllers', [])
     $scope.selectPicture = function() {
       Photo.selectPicture(ngNotify).then(function(imageURI) {
         $scope.imageViewData = ' ';
-          $scope.imageUploadData = imageURI;
-          var image = document.getElementById('reportImage');
-          image.src = imageURI;
+        $scope.imageUploadData = imageURI;
+        var image = document.getElementById('reportImage');
+        image.src = imageURI;
       });
     };
 
