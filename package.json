@@ -2,9 +2,6 @@
   "name": "MyBikeLane",
   "version": "0.2.7",
   "description": "my-bike-lane: Report parking violations in bike lanes",
-  "engines": {
-    "node": "0.12.x"
-  },
   "dependencies": {
     "express": "^4.12.3",
     "gulp": "^3.5.6",
