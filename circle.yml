@@ -1,8 +1,4 @@
 ---
-machine:
-  node:
-    version: 0.10.22
-
 test:
   override:
     - node_modules/.bin/jshint www/js
