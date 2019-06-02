@@ -7,6 +7,8 @@ Ionic mobile app to track bike lane violations.
 Development
 -----------
 
+    npm install -g cordova ionic gulp bower
+
     ionic platform add ios
     ionic platform add android
     ionic browser add crosswalk

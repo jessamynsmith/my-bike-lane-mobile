@@ -18,9 +18,11 @@
     "shelljs": "^0.3.0",
     "yargs": "^3.6.0"
   },
-  "cacheDirectories": ["node_modules", "www/lib"],
+  "cacheDirectories": [
+    "node_modules",
+    "www/lib"
+  ],
   "scripts": {
-    "preinstall": "npm install -g cordova ionic gulp bower",
     "postinstall": "bower install"
   },
   "cordovaPlugins": [
